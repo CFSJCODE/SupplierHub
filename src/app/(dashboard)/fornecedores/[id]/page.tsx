@@ -81,7 +81,7 @@ export default function FornecedorDetailPage({ params }: PageProps) {
       backHref="/fornecedores"
     >
       {loading ? (
-        <div className="bg-white border border-[#D2CAA9] rounded-lg p-6 shadow-subtle">
+        <div className="bg-white border border-slate-200 rounded-xl p-6 shadow-card">
           <TableSkeleton rows={4} />
         </div>
       ) : !supplier ? (

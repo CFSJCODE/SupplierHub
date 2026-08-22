@@ -26,9 +26,9 @@ export const Checkbox = forwardRef<HTMLInputElement, CheckboxProps>(
           />
           <div
             className={cn(
-              "w-4 h-4 rounded-sm border border-[#D2CAA9] bg-white transition-all flex items-center justify-center cursor-pointer",
-              "peer-checked:bg-brand-copper peer-checked:border-brand-copper peer-focus-visible:ring-2 peer-focus-visible:ring-brand-copper peer-focus-visible:ring-offset-1",
-              "peer-disabled:bg-stone-200 peer-disabled:cursor-not-allowed peer-disabled:opacity-50",
+              "w-4 h-4 rounded border border-slate-300 bg-white transition-all flex items-center justify-center cursor-pointer shadow-xs",
+              "peer-checked:bg-emerald-600 peer-checked:border-emerald-600 peer-focus-visible:ring-2 peer-focus-visible:ring-emerald-600 peer-focus-visible:ring-offset-1",
+              "peer-disabled:bg-slate-200 peer-disabled:cursor-not-allowed peer-disabled:opacity-50",
               className
             )}
             onClick={() => {
@@ -48,14 +48,14 @@ export const Checkbox = forwardRef<HTMLInputElement, CheckboxProps>(
             <label
               htmlFor={checkboxId}
               className={cn(
-                "font-medium text-forest-900 cursor-pointer block leading-tight",
+                "font-medium text-slate-900 cursor-pointer block leading-tight text-xs sm:text-sm",
                 disabled && "opacity-50 cursor-not-allowed"
               )}
             >
               {label}
             </label>
             {description && (
-              <p className="text-xs text-olive-800/70 mt-0.5">{description}</p>
+              <p className="text-xs text-slate-500 mt-0.5">{description}</p>
             )}
           </div>
         )}

@@ -12,7 +12,8 @@ import { ConfirmModal } from "@/components/ui/ConfirmModal";
 import { EmptyState } from "@/components/ui/EmptyState";
 import { TableSkeleton } from "@/components/ui/Skeleton";
 import { Button } from "@/components/ui/Button";
-import { BookmarkCheck, PlusCircle, Download } from "lucide-react";
+import { SupplierAIAnalysisModal } from "@/components/suppliers/SupplierAIAnalysisModal";
+import { BookmarkCheck, PlusCircle, FileSpreadsheet, List, LayoutGrid } from "lucide-react";
 import { exportSuppliersToCSV } from "@/lib/utils/export";
 import { toast } from "sonner";
 
@@ -30,7 +31,10 @@ export default function FavoritosPage() {
   const [loading, setLoading] = useState(true);
   const [favorites, setFavorites] = useState<Supplier[]>([]);
   const [filters, setFilters] = useState<SupplierFilters>(FAVORITE_FILTERS);
+  const [viewMode, setViewMode] = useState<"table" | "grid">("table");
+
   const [supplierToDelete, setSupplierToDelete] = useState<Supplier | null>(null);
+  const [supplierForAI, setSupplierForAI] = useState<Supplier | null>(null);
   const [isDeleting, setIsDeleting] = useState(false);
 
   const fetchFavorites = useCallback(async () => {
@@ -90,7 +94,7 @@ export default function FavoritosPage() {
               variant="outline"
               size="sm"
               onClick={() => exportSuppliersToCSV(favorites)}
-              leftIcon={<Download className="w-3.5 h-3.5" />}
+              leftIcon={<FileSpreadsheet className="w-3.5 h-3.5 text-emerald-600" />}
               className="hidden sm:inline-flex"
             >
               Exportar CSV
@@ -114,8 +118,44 @@ export default function FavoritosPage() {
           filteredCount={favorites.length}
         />
 
+        {/* View Mode Header */}
+        {!loading && favorites.length > 0 && (
+          <div className="flex items-center justify-between px-1">
+            <div className="text-xs text-slate-500 font-mono">
+              <strong className="text-slate-900">{favorites.length}</strong> fornecedor{favorites.length !== 1 ? "es" : ""} favorito{favorites.length !== 1 ? "s" : ""}
+            </div>
+
+            <div className="flex items-center space-x-1 bg-white border border-slate-200 rounded-lg p-0.5 shadow-2xs">
+              <button
+                type="button"
+                onClick={() => setViewMode("table")}
+                className={`p-1.5 rounded-md transition-colors cursor-pointer ${
+                  viewMode === "table"
+                    ? "bg-slate-100 text-slate-900 font-bold"
+                    : "text-slate-400 hover:text-slate-700"
+                }`}
+                title="Visualização em tabela"
+              >
+                <List className="w-4 h-4" />
+              </button>
+              <button
+                type="button"
+                onClick={() => setViewMode("grid")}
+                className={`p-1.5 rounded-md transition-colors cursor-pointer ${
+                  viewMode === "grid"
+                    ? "bg-slate-100 text-slate-900 font-bold"
+                    : "text-slate-400 hover:text-slate-700"
+                }`}
+                title="Visualização em cards"
+              >
+                <LayoutGrid className="w-4 h-4" />
+              </button>
+            </div>
+          </div>
+        )}
+
         {loading ? (
-          <div className="bg-white border border-[#D2CAA9] rounded-lg shadow-subtle">
+          <div className="bg-white border border-slate-200 rounded-xl shadow-card">
             <TableSkeleton rows={4} />
           </div>
         ) : favorites.length === 0 ? (
@@ -128,26 +168,41 @@ export default function FavoritosPage() {
           />
         ) : (
           <div className="space-y-4">
-            {/* Desktop Table View */}
-            <div className="hidden lg:block">
-              <SupplierTable
-                suppliers={favorites}
-                onToggleFavorite={handleToggleFavorite}
-                onDelete={(s) => setSupplierToDelete(s)}
-              />
-            </div>
-
-            {/* Mobile & Tablet Card View */}
-            <div className="grid grid-cols-1 sm:grid-cols-2 gap-3.5 lg:hidden">
-              {favorites.map((supplier) => (
-                <SupplierCard
-                  key={supplier.id}
-                  supplier={supplier}
-                  onToggleFavorite={handleToggleFavorite}
-                  onDelete={(s) => setSupplierToDelete(s)}
-                />
-              ))}
-            </div>
+            {viewMode === "table" ? (
+              <>
+                <div className="hidden lg:block">
+                  <SupplierTable
+                    suppliers={favorites}
+                    onToggleFavorite={handleToggleFavorite}
+                    onDelete={(s) => setSupplierToDelete(s)}
+                    onOpenAIModal={(s) => setSupplierForAI(s)}
+                  />
+                </div>
+                <div className="grid grid-cols-1 sm:grid-cols-2 gap-4 lg:hidden">
+                  {favorites.map((supplier) => (
+                    <SupplierCard
+                      key={supplier.id}
+                      supplier={supplier}
+                      onToggleFavorite={handleToggleFavorite}
+                      onDelete={(s) => setSupplierToDelete(s)}
+                      onOpenAIModal={(s) => setSupplierForAI(s)}
+                    />
+                  ))}
+                </div>
+              </>
+            ) : (
+              <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4">
+                {favorites.map((supplier) => (
+                  <SupplierCard
+                    key={supplier.id}
+                    supplier={supplier}
+                    onToggleFavorite={handleToggleFavorite}
+                    onDelete={(s) => setSupplierToDelete(s)}
+                    onOpenAIModal={(s) => setSupplierForAI(s)}
+                  />
+                ))}
+              </div>
+            )}
           </div>
         )}
       </div>
@@ -163,6 +218,14 @@ export default function FavoritosPage() {
         cancelLabel="Cancelar"
         isLoading={isDeleting}
       />
+
+      {supplierForAI && (
+        <SupplierAIAnalysisModal
+          isOpen={Boolean(supplierForAI)}
+          onClose={() => setSupplierForAI(null)}
+          supplier={supplierForAI}
+        />
+      )}
     </AppShell>
   );
 }

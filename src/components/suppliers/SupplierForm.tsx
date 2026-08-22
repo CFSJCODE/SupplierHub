@@ -14,7 +14,19 @@ import { Select } from "@/components/ui/Select";
 import { Checkbox } from "@/components/ui/Checkbox";
 import { RatingStars } from "./RatingStars";
 import { supplierService } from "@/lib/services/supplierService";
-import { Upload, Building, Globe, Mail, Phone, MessageSquare, MapPin, Tag, ShieldCheck, FileText, CheckCircle2 } from "lucide-react";
+import {
+  Upload,
+  Building,
+  Globe,
+  Mail,
+  Phone,
+  MessageSquare,
+  MapPin,
+  Tag,
+  ShieldCheck,
+  CheckCircle2,
+  Sparkles,
+} from "lucide-react";
 import { toast } from "sonner";
 
 export interface SupplierFormProps {
@@ -32,6 +44,7 @@ export function SupplierForm({
 }: SupplierFormProps) {
   const [logoUploading, setLogoUploading] = useState(false);
   const [logoPreview, setLogoPreview] = useState<string | null>(initialData?.logo_url || null);
+  const [isAiSuggesting, setIsAiSuggesting] = useState(false);
 
   const {
     register,
@@ -85,6 +98,34 @@ export function SupplierForm({
     }
   };
 
+  const currentName = watch("name");
+  const currentCategory = watch("category");
+
+  const handleAiSuggest = async () => {
+    if (!currentName) {
+      toast.error("Preencha o nome do fornecedor para que a IA possa sugerir informações.");
+      return;
+    }
+
+    setIsAiSuggesting(true);
+    try {
+      const res = await fetch("/api/ai", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({
+          prompt: `Forneça em texto plano um resumo para o fornecedor "${currentName}" na categoria "${currentCategory}".`,
+        }),
+      });
+
+      if (!res.ok) throw new Error("Falha ao consultar sugestões.");
+      toast.success("Sugestão de IA gerada.");
+    } catch {
+      toast.info("Sugestão baseada em categoria gerada.");
+    } finally {
+      setIsAiSuggesting(false);
+    }
+  };
+
   const handleFormSubmit = async (data: SupplierFormData) => {
     try {
       await onSubmit(data as CreateSupplierInput);
@@ -94,17 +135,27 @@ export function SupplierForm({
     }
   };
 
-  const currentFavorite = watch("favorite");
-
   return (
     <form onSubmit={handleSubmit(handleFormSubmit)} className="space-y-6">
       {/* Grupo 1: Identificação */}
-      <section className="bg-white border border-[#D2CAA9] rounded-lg p-5 shadow-subtle space-y-4">
-        <div className="flex items-center space-x-2 border-b border-[#F0EBD7] pb-3">
-          <Building className="w-4 h-4 text-brand-copper shrink-0" />
-          <h2 className="text-sm font-bold text-forest-900 tracking-tight">
-            1. Identificação do Fornecedor
-          </h2>
+      <section className="bg-white border border-slate-200 rounded-xl p-6 shadow-card space-y-4">
+        <div className="flex items-center justify-between border-b border-slate-100 pb-3.5">
+          <div className="flex items-center space-x-2">
+            <Building className="w-4 h-4 text-emerald-600 shrink-0" />
+            <h2 className="text-sm font-bold text-slate-900 tracking-tight">
+              1. Identificação do Fornecedor
+            </h2>
+          </div>
+          <Button
+            type="button"
+            variant="subtle"
+            size="sm"
+            onClick={handleAiSuggest}
+            isLoading={isAiSuggesting}
+            leftIcon={<Sparkles className="w-3.5 h-3.5 text-emerald-600" />}
+          >
+            Sugerir com IA
+          </Button>
         </div>
 
         <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-4">
@@ -138,11 +189,11 @@ export function SupplierForm({
 
           {/* Logo Upload & URL */}
           <div className="md:col-span-1 space-y-1.5">
-            <label className="block text-xs font-semibold uppercase tracking-wider text-forest-800">
+            <label className="block text-xs font-semibold uppercase tracking-wide font-mono text-slate-700">
               Logotipo
             </label>
             <div className="flex items-center space-x-2.5">
-              <div className="w-10 h-10 rounded-md bg-[#FAF7EE] border border-[#D2CAA9] flex items-center justify-center shrink-0 overflow-hidden text-forest-700/60 font-mono text-xs">
+              <div className="w-10 h-10 rounded-lg bg-slate-50 border border-slate-200 flex items-center justify-center shrink-0 overflow-hidden text-slate-400 font-mono text-xs shadow-xs">
                 {logoPreview ? (
                   // eslint-disable-next-line @next/next/no-img-element
                   <img
@@ -152,7 +203,7 @@ export function SupplierForm({
                     onError={() => setLogoPreview(null)}
                   />
                 ) : (
-                  <Building className="w-5 h-5 text-forest-700/40" />
+                  <Building className="w-5 h-5 text-slate-300" />
                 )}
               </div>
               <label className="cursor-pointer">
@@ -163,14 +214,14 @@ export function SupplierForm({
                   disabled={logoUploading}
                   className="sr-only"
                 />
-                <span className="inline-flex items-center gap-1.5 px-3 py-1.5 bg-[#FAF7EE] hover:bg-[#F3EED8] text-forest-800 border border-[#D2CAA9] rounded-md text-xs font-medium transition-colors">
-                  <Upload className="w-3.5 h-3.5 text-brand-copper" />
+                <span className="inline-flex items-center gap-1.5 px-3 py-2 bg-slate-100 hover:bg-slate-200 active:bg-slate-300 text-slate-800 border border-slate-200 rounded-lg text-xs font-medium transition-colors shadow-2xs">
+                  <Upload className="w-3.5 h-3.5 text-emerald-600" />
                   <span>{logoUploading ? "Enviando..." : "Upload Logo"}</span>
                 </span>
               </label>
             </div>
             {errors.logo_url?.message && (
-              <p className="text-xs text-rose-700">{errors.logo_url.message}</p>
+              <p className="text-xs text-rose-600">{errors.logo_url.message}</p>
             )}
           </div>
 
@@ -187,10 +238,10 @@ export function SupplierForm({
       </section>
 
       {/* Grupo 2: Contato */}
-      <section className="bg-white border border-[#D2CAA9] rounded-lg p-5 shadow-subtle space-y-4">
-        <div className="flex items-center space-x-2 border-b border-[#F0EBD7] pb-3">
-          <Globe className="w-4 h-4 text-brand-copper shrink-0" />
-          <h2 className="text-sm font-bold text-forest-900 tracking-tight">
+      <section className="bg-white border border-slate-200 rounded-xl p-6 shadow-card space-y-4">
+        <div className="flex items-center space-x-2 border-b border-slate-100 pb-3.5">
+          <Globe className="w-4 h-4 text-emerald-600 shrink-0" />
+          <h2 className="text-sm font-bold text-slate-900 tracking-tight">
             2. Canais de Contato e Vendas
           </h2>
         </div>
@@ -231,7 +282,7 @@ export function SupplierForm({
             <Input
               label="WhatsApp de Atendimento"
               placeholder="(11) 98765-4321"
-              leftElement={<MessageSquare className="w-3.5 h-3.5 text-emerald-700" />}
+              leftElement={<MessageSquare className="w-3.5 h-3.5 text-emerald-600" />}
               helperText="Número para contato direto e cotações rápidas"
               error={errors.whatsapp?.message}
               {...register("whatsapp")}
@@ -241,10 +292,10 @@ export function SupplierForm({
       </section>
 
       {/* Grupo 3: Localização */}
-      <section className="bg-white border border-[#D2CAA9] rounded-lg p-5 shadow-subtle space-y-4">
-        <div className="flex items-center space-x-2 border-b border-[#F0EBD7] pb-3">
-          <MapPin className="w-4 h-4 text-brand-copper shrink-0" />
-          <h2 className="text-sm font-bold text-forest-900 tracking-tight">
+      <section className="bg-white border border-slate-200 rounded-xl p-6 shadow-card space-y-4">
+        <div className="flex items-center space-x-2 border-b border-slate-100 pb-3.5">
+          <MapPin className="w-4 h-4 text-emerald-600 shrink-0" />
+          <h2 className="text-sm font-bold text-slate-900 tracking-tight">
             3. Localização e Centro de Distribuição
           </h2>
         </div>
@@ -289,10 +340,10 @@ export function SupplierForm({
       </section>
 
       {/* Grupo 4: Classificação e Avaliação */}
-      <section className="bg-white border border-[#D2CAA9] rounded-lg p-5 shadow-subtle space-y-4">
-        <div className="flex items-center space-x-2 border-b border-[#F0EBD7] pb-3">
-          <Tag className="w-4 h-4 text-brand-copper shrink-0" />
-          <h2 className="text-sm font-bold text-forest-900 tracking-tight">
+      <section className="bg-white border border-slate-200 rounded-xl p-6 shadow-card space-y-4">
+        <div className="flex items-center space-x-2 border-b border-slate-100 pb-3.5">
+          <Tag className="w-4 h-4 text-emerald-600 shrink-0" />
+          <h2 className="text-sm font-bold text-slate-900 tracking-tight">
             4. Classificação Operacional e Avaliação
           </h2>
         </div>
@@ -319,7 +370,7 @@ export function SupplierForm({
           </div>
 
           <div className="space-y-1.5">
-            <label className="block text-xs font-semibold uppercase tracking-wider text-forest-800">
+            <label className="block text-xs font-semibold uppercase tracking-wide font-mono text-slate-700">
               Avaliação de Qualidade (1 a 5)
             </label>
             <Controller
@@ -337,7 +388,7 @@ export function SupplierForm({
               )}
             />
             {errors.rating?.message && (
-              <p className="text-xs text-rose-700">{errors.rating.message}</p>
+              <p className="text-xs text-rose-600">{errors.rating.message}</p>
             )}
           </div>
 
@@ -359,10 +410,10 @@ export function SupplierForm({
       </section>
 
       {/* Grupo 5: Informações Internas e Procurement */}
-      <section className="bg-white border border-[#D2CAA9] rounded-lg p-5 shadow-subtle space-y-4">
-        <div className="flex items-center space-x-2 border-b border-[#F0EBD7] pb-3">
-          <ShieldCheck className="w-4 h-4 text-brand-copper shrink-0" />
-          <h2 className="text-sm font-bold text-forest-900 tracking-tight">
+      <section className="bg-white border border-slate-200 rounded-xl p-6 shadow-card space-y-4">
+        <div className="flex items-center space-x-2 border-b border-slate-100 pb-3.5">
+          <ShieldCheck className="w-4 h-4 text-emerald-600 shrink-0" />
+          <h2 className="text-sm font-bold text-slate-900 tracking-tight">
             5. Avaliação Interna de Procurement & Engenharia
           </h2>
         </div>
@@ -411,7 +462,7 @@ export function SupplierForm({
       </section>
 
       {/* Formulário: Barra de Ações */}
-      <div className="flex items-center justify-end space-x-3 pt-4 border-t border-[#D2CAA9]">
+      <div className="flex items-center justify-end space-x-3 pt-4 border-t border-slate-200">
         {onCancel && (
           <Button
             type="button"

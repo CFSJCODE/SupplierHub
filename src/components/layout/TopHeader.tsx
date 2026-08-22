@@ -2,7 +2,7 @@
 
 import React from "react";
 import Link from "next/link";
-import { Menu, PlusCircle, BookmarkCheck, ArrowLeft, Sparkles, Activity } from "lucide-react";
+import { Menu, PlusCircle, BookmarkCheck, ArrowLeft } from "lucide-react";
 import { Button } from "@/components/ui/Button";
 
 export interface TopHeaderProps {
@@ -23,12 +23,12 @@ export function TopHeader({
   action,
 }: TopHeaderProps) {
   return (
-    <header className="h-16 bg-white/95 backdrop-blur-md border-b border-[#D2CAA9] px-4 sm:px-6 flex items-center justify-between sticky top-0 z-20 shadow-subtle transition-all">
+    <header className="h-16 bg-white/95 backdrop-blur-md border-b border-slate-200 px-4 sm:px-6 flex items-center justify-between sticky top-0 z-20 shadow-xs transition-all">
       <div className="flex items-center space-x-3 min-w-0">
         {/* Mobile menu toggle */}
         <button
           onClick={onOpenMobileNav}
-          className="p-1.5 -ml-1.5 text-forest-800 hover:text-forest-900 rounded-md hover:bg-[#FAF7EE] lg:hidden focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-brand-copper"
+          className="p-1.5 -ml-1.5 text-slate-700 hover:text-slate-900 rounded-lg hover:bg-slate-100 lg:hidden focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-emerald-600 cursor-pointer"
           aria-label="Abrir menu lateral"
         >
           <Menu className="w-5 h-5" />
@@ -37,7 +37,7 @@ export function TopHeader({
         {showBack && (
           <Link
             href={backHref}
-            className="p-1.5 text-forest-800/80 hover:text-forest-900 hover:bg-[#FAF7EE] rounded-md transition-colors"
+            className="p-1.5 text-slate-600 hover:text-slate-900 hover:bg-slate-100 rounded-lg transition-colors"
             title="Voltar"
           >
             <ArrowLeft className="w-4 h-4" />
@@ -45,17 +45,17 @@ export function TopHeader({
         )}
 
         <div className="min-w-0">
-          <div className="flex items-center space-x-2">
-            <h1 className="text-base sm:text-lg font-bold text-forest-900 tracking-tight truncate leading-tight">
+          <div className="flex items-center space-x-2.5">
+            <h1 className="text-base sm:text-lg font-bold text-slate-900 tracking-tight truncate leading-tight">
               {title}
             </h1>
-            <span className="hidden md:inline-flex items-center space-x-1 px-2 py-0.5 bg-emerald-50 text-emerald-800 border border-emerald-200 rounded-full text-[10px] font-mono">
+            <span className="hidden md:inline-flex items-center space-x-1.5 px-2.5 py-0.5 bg-emerald-50 text-emerald-800 border border-emerald-200 rounded-full text-[10px] font-mono font-medium">
               <span className="w-1.5 h-1.5 rounded-full bg-emerald-500 animate-pulse" />
-              <span>Cloud Ativo</span>
+              <span>Supabase Cloud</span>
             </span>
           </div>
           {subtitle && (
-            <p className="text-[11px] sm:text-xs text-olive-800/70 truncate">
+            <p className="text-[11px] sm:text-xs text-slate-500 truncate mt-0.5">
               {subtitle}
             </p>
           )}
@@ -69,9 +69,9 @@ export function TopHeader({
           <>
             <Link href="/favoritos" className="hidden sm:inline-flex">
               <Button
-                variant="subtle"
+                variant="outline"
                 size="sm"
-                leftIcon={<BookmarkCheck className="w-3.5 h-3.5 text-brand-copper" />}
+                leftIcon={<BookmarkCheck className="w-3.5 h-3.5 text-amber-600" />}
               >
                 Favoritos
               </Button>
@@ -80,7 +80,6 @@ export function TopHeader({
               <Button
                 size="sm"
                 leftIcon={<PlusCircle className="w-3.5 h-3.5" />}
-                className="shadow-sm"
               >
                 Novo Fornecedor
               </Button>

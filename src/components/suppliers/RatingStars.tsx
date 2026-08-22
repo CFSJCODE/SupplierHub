@@ -31,7 +31,7 @@ export function RatingStars({
 
   if (readOnly) {
     if (!value || value <= 0) {
-      return <span className="text-xs text-forest-800/40 italic font-mono">-</span>;
+      return <span className="text-xs text-slate-400 italic font-mono">-</span>;
     }
 
     return (
@@ -43,14 +43,14 @@ export function RatingStars({
               className={cn(
                 starSizes[size],
                 star <= (value || 0)
-                  ? "text-brand-copper fill-brand-copper"
-                  : "text-[#D2CAA9] fill-transparent"
+                  ? "text-amber-500 fill-amber-500"
+                  : "text-slate-200 fill-transparent"
               )}
             />
           ))}
         </div>
         {showValue && (
-          <span className="text-xs font-mono font-medium text-forest-900 ml-1">
+          <span className="text-xs font-mono font-bold text-slate-700 ml-1">
             {value.toFixed(0)}/5
           </span>
         )}
@@ -67,20 +67,19 @@ export function RatingStars({
             key={star}
             onClick={() => {
               if (onChange) {
-                // If clicked already selected, clear it
                 onChange(value === star ? null : star);
               }
             }}
             onMouseEnter={() => setHoveredRating(star)}
-            className="p-0.5 rounded-sm hover:scale-110 transition-transform focus-visible:outline-none focus-visible:ring-1 focus-visible:ring-brand-copper"
+            className="p-0.5 rounded hover:scale-110 transition-transform focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-amber-500 cursor-pointer"
             aria-label={`Avaliar ${star} estrelas`}
           >
             <Star
               className={cn(
                 starSizes[size],
                 star <= currentVal
-                  ? "text-brand-copper fill-brand-copper"
-                  : "text-[#D2CAA9] hover:text-brand-clay fill-transparent"
+                  ? "text-amber-500 fill-amber-500"
+                  : "text-slate-300 hover:text-amber-400 fill-transparent"
               )}
             />
           </button>
@@ -90,12 +89,12 @@ export function RatingStars({
         <button
           type="button"
           onClick={() => onChange && onChange(null)}
-          className="text-[11px] text-olive-800/70 hover:text-rose-700 underline"
+          className="text-xs text-slate-500 hover:text-rose-600 underline cursor-pointer"
         >
           Limpar
         </button>
       ) : (
-        <span className="text-xs text-olive-800/60">(opcional)</span>
+        <span className="text-xs text-slate-400">(opcional)</span>
       )}
     </div>
   );

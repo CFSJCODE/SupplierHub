@@ -27,14 +27,14 @@ export function EmptyState({
   onSecondaryAction,
 }: EmptyStateProps) {
   return (
-    <div className="flex flex-col items-center justify-center p-8 sm:p-12 text-center bg-white border border-[#D2CAA9] rounded-lg shadow-subtle my-4">
-      <div className="w-12 h-12 rounded-md bg-[#FAF7EE] border border-[#E5DFC5] flex items-center justify-center text-forest-700/80 mb-4">
+    <div className="flex flex-col items-center justify-center p-8 sm:p-12 text-center bg-white border border-slate-200 rounded-xl shadow-card my-4">
+      <div className="w-12 h-12 rounded-xl bg-slate-100 border border-slate-200/80 flex items-center justify-center text-slate-500 mb-4 shadow-xs">
         <Icon className="w-6 h-6" />
       </div>
-      <h3 className="text-base font-semibold text-forest-900 mb-1.5 tracking-tight">
+      <h3 className="text-base font-bold text-slate-900 mb-1.5 tracking-tight">
         {title}
       </h3>
-      <p className="text-xs text-olive-800/80 max-w-md leading-relaxed mb-6">
+      <p className="text-xs text-slate-500 max-w-md leading-relaxed mb-6">
         {description}
       </p>
 

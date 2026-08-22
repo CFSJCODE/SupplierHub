@@ -20,7 +20,7 @@ export default function RootLayout({
 }>) {
   return (
     <html lang="pt-BR">
-      <body className="min-h-screen bg-brand-cornsilk text-forest-900 antialiased selection:bg-brand-clay/30">
+      <body className="min-h-screen bg-slate-50 text-slate-900 antialiased selection:bg-emerald-100 selection:text-emerald-950 font-sans">
         {children}
         <Toaster
           position="top-right"
@@ -29,12 +29,12 @@ export default function RootLayout({
           toastOptions={{
             style: {
               background: "#FFFFFF",
-              color: "#18220F",
-              border: "1px solid #D2CAA9",
-              borderRadius: "6px",
+              color: "#0F172A",
+              border: "1px solid #E2E8F0",
+              borderRadius: "8px",
               fontSize: "13px",
               fontFamily: "inherit",
-              boxShadow: "0 4px 6px -1px rgba(40, 54, 24, 0.1)",
+              boxShadow: "0 10px 25px -3px rgba(15, 23, 42, 0.08)",
             },
           }}
         />

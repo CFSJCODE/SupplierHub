@@ -64,7 +64,7 @@ export default function EditarFornecedorPage({ params }: PageProps) {
       backHref={supplier ? `/fornecedores/${supplier.id}` : "/fornecedores"}
     >
       {loading ? (
-        <div className="bg-white border border-[#D2CAA9] rounded-lg p-6 shadow-subtle max-w-4xl mx-auto">
+        <div className="bg-white border border-slate-200 rounded-xl p-6 shadow-card max-w-4xl mx-auto">
           <TableSkeleton rows={4} />
         </div>
       ) : !supplier ? (

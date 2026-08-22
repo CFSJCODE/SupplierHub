@@ -86,12 +86,12 @@ export function SupplierAIAnalysisModal({
     >
       <div className="space-y-4">
         {!analysisText && !isLoading && !hasError && (
-          <div className="p-5 text-center bg-[#FAF7EE] border border-[#E5DFC5] rounded-lg space-y-3">
-            <div className="w-10 h-10 bg-brand-clay/20 text-brand-copper rounded-md flex items-center justify-center mx-auto">
+          <div className="p-6 text-center bg-slate-50 border border-slate-200 rounded-xl space-y-3">
+            <div className="w-11 h-11 bg-emerald-100 text-emerald-700 rounded-xl flex items-center justify-center mx-auto shadow-xs">
               <Sparkles className="w-5 h-5" />
             </div>
-            <p className="text-xs text-forest-800/80 max-w-sm mx-auto leading-relaxed">
-              O Vercel AI Gateway analisará o histórico, segmento ({supplier.category}) e localização para gerar recomendações técnicas de procurement.
+            <p className="text-xs text-slate-600 max-w-sm mx-auto leading-relaxed">
+              O Vercel AI Gateway analisará os dados cadastrados, segmento técnico ({supplier.category}) e localização para emitir um relatório de compras para engenharia.
             </p>
             <Button
               size="sm"
@@ -104,15 +104,15 @@ export function SupplierAIAnalysisModal({
         )}
 
         {isLoading && (
-          <div className="p-6 bg-[#FAF7EE] border border-[#E5DFC5] rounded-lg space-y-3 text-center">
-            <div className="inline-flex p-2 bg-brand-copper/10 rounded-full animate-bounce">
-              <Bot className="w-5 h-5 text-brand-copper" />
+          <div className="p-6 bg-slate-50 border border-slate-200 rounded-xl space-y-3 text-center">
+            <div className="inline-flex p-2.5 bg-emerald-100 rounded-full animate-bounce">
+              <Bot className="w-5 h-5 text-emerald-700" />
             </div>
-            <p className="text-xs font-mono font-medium text-forest-900 animate-pulse">
+            <p className="text-xs font-mono font-medium text-slate-900 animate-pulse">
               Consultando Vercel AI Gateway...
             </p>
             {analysisText && (
-              <div className="text-left text-xs text-forest-900 whitespace-pre-wrap font-sans bg-white p-4 rounded-md border border-[#D2CAA9] max-h-60 overflow-y-auto">
+              <div className="text-left text-xs text-slate-900 whitespace-pre-wrap font-sans bg-white p-4 rounded-lg border border-slate-200 max-h-60 overflow-y-auto shadow-xs">
                 {analysisText}
               </div>
             )}
@@ -120,7 +120,7 @@ export function SupplierAIAnalysisModal({
         )}
 
         {hasError && (
-          <div className="p-4 bg-rose-50 border border-rose-200 rounded-lg space-y-2 text-xs text-rose-800">
+          <div className="p-4 bg-rose-50 border border-rose-200 rounded-xl space-y-2 text-xs text-rose-800">
             <div className="flex items-center space-x-1.5 font-bold">
               <AlertCircle className="w-4 h-4 text-rose-600 shrink-0" />
               <span>Aviso do AI Gateway</span>
@@ -139,12 +139,12 @@ export function SupplierAIAnalysisModal({
 
         {analysisText && !isLoading && (
           <div className="space-y-3">
-            <div className="bg-[#FAF7EE] border border-[#E5DFC5] rounded-lg p-4 text-xs text-forest-900 whitespace-pre-wrap leading-relaxed max-h-80 overflow-y-auto font-sans">
+            <div className="bg-slate-50 border border-slate-200 rounded-xl p-4.5 text-xs text-slate-900 whitespace-pre-wrap leading-relaxed max-h-80 overflow-y-auto font-sans shadow-xs">
               {analysisText}
             </div>
 
             <div className="flex items-center justify-between pt-2">
-              <span className="text-[11px] font-mono text-olive-800/70">
+              <span className="text-[11px] font-mono text-slate-500">
                 Gerado via Vercel AI SDK & AI Gateway
               </span>
               <div className="flex items-center space-x-2">

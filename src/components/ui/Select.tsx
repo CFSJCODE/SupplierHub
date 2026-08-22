@@ -39,9 +39,9 @@ export const Select = forwardRef<HTMLSelectElement, SelectProps>(
         {label && (
           <label
             htmlFor={selectId}
-            className="block text-xs font-semibold uppercase tracking-wider text-forest-800"
+            className="block text-xs font-semibold text-slate-700 uppercase tracking-wide font-mono"
           >
-            {label} {required && <span className="text-copper-700">*</span>}
+            {label} {required && <span className="text-rose-600 font-bold">*</span>}
           </label>
         )}
         <div className="relative flex items-center">
@@ -49,12 +49,12 @@ export const Select = forwardRef<HTMLSelectElement, SelectProps>(
             id={selectId}
             ref={ref}
             className={cn(
-              "w-full h-9 pl-3 pr-8 py-1.5 text-sm bg-white text-forest-900 border rounded-md appearance-none transition-colors cursor-pointer",
-              "focus:outline-none focus:ring-1 focus:ring-brand-copper focus:border-brand-copper",
-              "disabled:bg-stone-100 disabled:text-stone-400 disabled:cursor-not-allowed",
+              "w-full h-10 pl-3.5 pr-9 py-2 text-sm bg-white text-slate-900 border rounded-lg appearance-none transition-all shadow-xs cursor-pointer",
+              "focus:outline-none focus:ring-2 focus:ring-emerald-500/20 focus:border-emerald-600",
+              "disabled:bg-slate-100 disabled:text-slate-400 disabled:cursor-not-allowed",
               error
-                ? "border-rose-600 focus:ring-rose-600 focus:border-rose-600"
-                : "border-[#D2CAA9] hover:border-[#B5AB86]",
+                ? "border-rose-400 text-rose-900 focus:ring-rose-500/20 focus:border-rose-600"
+                : "border-slate-200 hover:border-slate-300",
               className
             )}
             {...props}
@@ -80,13 +80,13 @@ export const Select = forwardRef<HTMLSelectElement, SelectProps>(
             })}
             {children}
           </select>
-          <div className="absolute right-2.5 pointer-events-none text-forest-700/60 flex items-center">
+          <div className="absolute right-3 pointer-events-none text-slate-400 flex items-center">
             <ChevronDown className="w-4 h-4" />
           </div>
         </div>
-        {error && <p className="text-xs text-rose-700 font-medium">{error}</p>}
+        {error && <p className="text-xs text-rose-600 font-medium">{error}</p>}
         {!error && helperText && (
-          <p className="text-xs text-olive-800/70">{helperText}</p>
+          <p className="text-xs text-slate-500">{helperText}</p>
         )}
       </div>
     );

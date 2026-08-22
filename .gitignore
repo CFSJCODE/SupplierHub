@@ -27,6 +27,7 @@ yarn-error.log*
 .env*.local
 .env
 CREDENTIALS_AND_DEPLOYMENT.md
+client_secret_*.json
 supabase/.temp/
 
 # vercel
