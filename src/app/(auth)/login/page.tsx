@@ -3,7 +3,6 @@
 import React, { useState } from "react";
 import { useRouter } from "next/navigation";
 import { createClient } from "@/lib/supabase/client";
-import { isSupabaseConfigured } from "@/lib/services/supplierService";
 import { Button } from "@/components/ui/Button";
 import { Input } from "@/components/ui/Input";
 import {
@@ -19,7 +18,6 @@ import {
   Check,
   Eye,
   EyeOff,
-  Star,
   Users,
 } from "lucide-react";
 import { toast } from "sonner";
@@ -58,19 +56,12 @@ export default function LoginPage() {
   const [isGoogleLoading, setIsGoogleLoading] = useState(false);
   const [errorMessage, setErrorMessage] = useState<string | null>(null);
 
-  // Login com Google
+  // Login com Google OAuth 2.0
   const handleGoogleLogin = async () => {
     setErrorMessage(null);
     setIsGoogleLoading(true);
 
     try {
-      if (!isSupabaseConfigured()) {
-        toast.success("Login simulado via Google (Modo de Demonstração)!");
-        router.push("/dashboard");
-        router.refresh();
-        return;
-      }
-
       const supabase = createClient();
       const redirectUrl = `${window.location.origin}/auth/callback`;
 
@@ -85,9 +76,7 @@ export default function LoginPage() {
         },
       });
 
-      if (error) {
-        throw error;
-      }
+      if (error) throw error;
 
       if (data?.url) {
         window.location.href = data.url;
@@ -96,7 +85,7 @@ export default function LoginPage() {
       const msg =
         err instanceof Error
           ? err.message
-          : "Erro ao autenticar com a conta Google. Tente novamente ou use seu e-mail.";
+          : "Erro ao autenticar com a conta Google. Verifique sua conexão e tente novamente.";
       setErrorMessage(msg);
       toast.error(msg);
       setIsGoogleLoading(false);
@@ -121,17 +110,6 @@ export default function LoginPage() {
     setIsLoading(true);
 
     try {
-      if (!isSupabaseConfigured()) {
-        toast.success(
-          isSignUp
-            ? "Conta criada com sucesso (Modo Demonstração)!"
-            : "Login efetuado com sucesso (Modo Demonstração)!"
-        );
-        router.push("/dashboard");
-        router.refresh();
-        return;
-      }
-
       const supabase = createClient();
 
       if (isSignUp) {
@@ -151,7 +129,7 @@ export default function LoginPage() {
           router.push("/dashboard");
           router.refresh();
         } else {
-          toast.success("Conta criada! Verifique seu e-mail para confirmar seu acesso.");
+          toast.success("Conta criada com sucesso! Verifique seu e-mail para confirmar seu acesso.");
           setIsSignUp(false);
         }
       } else {

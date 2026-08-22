@@ -7,10 +7,8 @@ import { supplierService } from "@/lib/services/supplierService";
 import { Supplier, SupplierStats } from "@/types/supplier";
 import { StatusBadge } from "@/components/suppliers/StatusBadge";
 import { CategoryBadge } from "@/components/suppliers/CategoryBadge";
-import { RatingStars } from "@/components/suppliers/RatingStars";
 import { StatsSkeleton, TableSkeleton } from "@/components/ui/Skeleton";
 import { EmptyState } from "@/components/ui/EmptyState";
-import { Button } from "@/components/ui/Button";
 import { SupplierAIAnalysisModal } from "@/components/suppliers/SupplierAIAnalysisModal";
 import {
   Building2,
@@ -32,7 +30,6 @@ export default function DashboardPage() {
   const [stats, setStats] = useState<SupplierStats | null>(null);
   const [recentSuppliers, setRecentSuppliers] = useState<Supplier[]>([]);
   const [categoryCounts, setCategoryCounts] = useState<Record<string, number>>({});
-  const [seeding, setSeeding] = useState(false);
   const [aiModalSupplier, setAiModalSupplier] = useState<Supplier | null>(null);
 
   const fetchDashboardData = async () => {
@@ -44,7 +41,7 @@ export default function DashboardPage() {
       setCategoryCounts(data.categoryCounts);
     } catch (err: unknown) {
       console.error("Erro ao carregar dados do painel:", err);
-      toast.error("Erro ao carregar métricas do painel.");
+      toast.error("Erro ao carregar informações do painel.");
     } finally {
       setLoading(false);
     }
@@ -53,20 +50,6 @@ export default function DashboardPage() {
   useEffect(() => {
     fetchDashboardData();
   }, []);
-
-  const handleSeedDemo = async () => {
-    try {
-      setSeeding(true);
-      const count = await supplierService.seedDemoSuppliers();
-      toast.success(`${count} fornecedores de exemplo adicionados com sucesso!`);
-      await fetchDashboardData();
-    } catch (err: unknown) {
-      const msg = err instanceof Error ? err.message : "Erro ao carregar exemplos.";
-      toast.error(msg);
-    } finally {
-      setSeeding(false);
-    }
-  };
 
   const totalSuppliers = stats?.total || 0;
 
@@ -144,7 +127,7 @@ export default function DashboardPage() {
               </div>
             </div>
 
-            {/* Segmentos Cobertos */}
+            {/* Categorias Cobertas */}
             <div className="interactive-card bg-white border border-slate-200 rounded-xl p-5 shadow-card flex flex-col justify-between relative overflow-hidden group">
               <div className="absolute top-0 left-0 right-0 h-1 bg-blue-600" />
               <div className="flex items-center justify-between">
@@ -261,8 +244,6 @@ export default function DashboardPage() {
                 description="Cadastre seu primeiro fornecedor para começar a organizar sua rede de compras e contatos comerciais."
                 actionLabel="Cadastrar fornecedor"
                 actionHref="/fornecedores/novo"
-                secondaryActionLabel="Carregar Exemplos"
-                onSecondaryAction={handleSeedDemo}
               />
             ) : (
               <div className="divide-y divide-slate-100">
@@ -345,7 +326,7 @@ export default function DashboardPage() {
               <div className="pt-3.5 space-y-2.5 max-h-80 overflow-y-auto pr-1">
                 {Object.keys(categoryCounts).length === 0 ? (
                   <p className="text-xs text-slate-400 py-6 text-center italic">
-                    Nenhuma categoria registrada.
+                    Nenhuma categoria registrada até o momento.
                   </p>
                 ) : (
                   Object.entries(categoryCounts)
@@ -378,28 +359,6 @@ export default function DashboardPage() {
                 )}
               </div>
             </div>
-
-            {/* Seed Card */}
-            {stats && stats.total === 0 && (
-              <div className="p-4 bg-emerald-50 border border-emerald-200 rounded-xl mt-4 space-y-2 shadow-xs">
-                <div className="flex items-center space-x-1.5 text-xs font-bold text-emerald-950">
-                  <Sparkles className="w-4 h-4 text-emerald-700" />
-                  <span>Deseja começar com exemplos?</span>
-                </div>
-                <p className="text-[11px] text-emerald-900 leading-relaxed">
-                  Carregue uma lista inicial com dados de exemplo de fornecedores para explorar o sistema.
-                </p>
-                <Button
-                  size="sm"
-                  variant="primary"
-                  onClick={handleSeedDemo}
-                  isLoading={seeding}
-                  className="w-full text-xs"
-                >
-                  Carregar Dados de Exemplo
-                </Button>
-              </div>
-            )}
           </div>
         </div>
       </div>

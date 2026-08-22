@@ -1,266 +1,24 @@
 import { createClient } from "@/lib/supabase/client";
-import { Supplier, CreateSupplierInput, UpdateSupplierInput, SupplierFilters, SupplierStats } from "@/types/supplier";
-
-// Demo initial dataset as requested in Requirement #49
-export const DEMO_INITIAL_SUPPLIERS: Omit<Supplier, "id" | "created_by" | "created_at" | "updated_at">[] = [
-  {
-    name: "MakerHero",
-    legal_name: "MakerHero Tecnologia Ltda.",
-    trade_name: "MakerHero (antiga FilipeFlop)",
-    website: "https://www.makerhero.com",
-    email: "contato@makerhero.com",
-    phone: "(48) 3371-7000",
-    whatsapp: "48999990001",
-    country: "Brasil",
-    state: "SC",
-    city: "Florianópolis",
-    address: "Rodovia José Carlos Daux, 5500",
-    category: "Microcontroladores",
-    status: "Preferencial",
-    rating: 5,
-    favorite: true,
-    description: "Referência nacional em placas Arduino, ESP32, Raspberry Pi, módulos e impressão 3D.",
-    advantages: "Entrega rápida, suporte técnico especializado, ampla documentação e tutoriais.",
-    limitations: "Preço ligeiramente acima de importação direta.",
-    purchase_experience: "Excelente atendimento pós-venda e embalagem muito bem protegida para componentes sensíveis.",
-    notes: "Utilizar como fornecedor prioritário para prototipagem rápida e desenvolvimento de PoCs.",
-    logo_url: "https://images.unsplash.com/photo-1518770660439-4636190af475?w=128&auto=format&fit=crop&q=80",
-  },
-  {
-    name: "RoboCore",
-    legal_name: "RoboCore Tecnologia Eireli",
-    trade_name: "RoboCore",
-    website: "https://www.robocore.net",
-    email: "vendas@robocore.net",
-    phone: "(11) 4118-2000",
-    whatsapp: "11988880002",
-    country: "Brasil",
-    state: "SP",
-    city: "Barueri",
-    address: "Al. Rio Negro, 503",
-    category: "Robótica",
-    status: "Preferencial",
-    rating: 5,
-    favorite: true,
-    description: "Fabricante e distribuidor especializado em robótica de combate, motores de alta potência, drivers e shields industriais.",
-    advantages: "Equipamentos de alta robustez mecânica e eletrônica, desenvolvimento nacional.",
-    limitations: "Catálogo focado em robótica e acionamentos.",
-    purchase_experience: "Qualidade de construção impecável dos motores e pontes H.",
-    notes: "Fornecedor padrão para sistemas de tração, servomotores de alto torque e drivers de potência.",
-    logo_url: "https://images.unsplash.com/photo-1485827404703-89b55fcc595e?w=128&auto=format&fit=crop&q=80",
-  },
-  {
-    name: "UsinaInfo",
-    legal_name: "UsinaInfo Comércio Eletrônico Ltda.",
-    trade_name: "UsinaInfo",
-    website: "https://www.usinainfo.com.br",
-    email: "atendimento@usinainfo.com.br",
-    phone: "(54) 3025-1000",
-    whatsapp: "54999990003",
-    country: "Brasil",
-    state: "RS",
-    city: "Caxias do Sul",
-    address: "Rua Sinimbu, 1200",
-    category: "Ferramentas",
-    status: "Ativo",
-    rating: 4,
-    favorite: false,
-    description: "Amplo catálogo de ferramentas para bancada eletrônica, estações de solda, instrumentos de medição e insumos.",
-    advantages: "Grande variedade de ferramentas específicas para manutenção e prototipagem.",
-    limitations: "Estoque de alguns CIs específicos pode variar.",
-    purchase_experience: "Envio ágil com opções de frete econômico.",
-    notes: "Consultar sempre para aquisição de pontas de solda, microscópios USB e organizadores de bancada.",
-    logo_url: "https://images.unsplash.com/photo-1581092160607-ee22621dd758?w=128&auto=format&fit=crop&q=80",
-  },
-  {
-    name: "Mouser Electronics",
-    legal_name: "Mouser Electronics, Inc.",
-    trade_name: "Mouser",
-    website: "https://www.mouser.com",
-    email: "brasil@mouser.com",
-    phone: "(11) 4197-2000",
-    whatsapp: null,
-    country: "Estados Unidos",
-    state: "Texas",
-    city: "Mansfield",
-    address: "1000 North Main Street",
-    category: "Distribuidores",
-    status: "Preferencial",
-    rating: 5,
-    favorite: true,
-    description: "Distribuidor global autorizado de semicondutores e componentes eletrônicos originais com rastreabilidade total.",
-    advantages: "Catálogo gigantesco, componentes 100% originais com datasheet e dados de engenharia completos.",
-    limitations: "Frete internacional e impostos de importação em pedidos de baixo valor.",
-    purchase_experience: "Padrão de excelência global em embalagem anti-estática e documentação de conformidade.",
-    notes: "Ideal para BOMs de produção, circuitos integrados de precisão e componentes difíceis de encontrar localmente.",
-    logo_url: "https://images.unsplash.com/photo-1555664424-778a1e5e1b48?w=128&auto=format&fit=crop&q=80",
-  },
-  {
-    name: "DigiKey",
-    legal_name: "DigiKey Corporation",
-    trade_name: "DigiKey",
-    website: "https://www.digikey.com",
-    email: "support@digikey.com",
-    phone: "+1 800-344-4539",
-    whatsapp: null,
-    country: "Estados Unidos",
-    state: "Minnesota",
-    city: "Thief River Falls",
-    address: "701 Brooks Avenue South",
-    category: "Distribuidores",
-    status: "Ativo",
-    rating: 5,
-    favorite: false,
-    description: "Líder global em distribuição de componentes eletrônicos e ferramentas de design paramétrico para engenharia.",
-    advantages: "Ferramenta de busca paramétrica excepcional e estoque em tempo real.",
-    limitations: "Processo de desembaraço aduaneiro para o Brasil.",
-    purchase_experience: "Despacho no mesmo dia para pedidos internacionais.",
-    notes: "Excelente para pesquisa de componentes equivalentes e substitutos técnicos.",
-    logo_url: "https://images.unsplash.com/photo-1517077304055-6e89abbf09b0?w=128&auto=format&fit=crop&q=80",
-  },
-  {
-    name: "AliExpress",
-    legal_name: "Alibaba Group",
-    trade_name: "AliExpress Choice & Direct",
-    website: "https://www.aliexpress.com",
-    email: null,
-    phone: null,
-    whatsapp: null,
-    country: "China",
-    state: "Zhejiang",
-    city: "Hangzhou",
-    address: "969 West Wen Yi Road",
-    category: "Marketplaces",
-    status: "Em avaliação",
-    rating: 3,
-    favorite: false,
-    description: "Marketplace internacional para insumos mecânicos, perfis de alumínio, rolamentos, parafusos e componentes genéricos.",
-    advantages: "Preço unitário extremamente baixo para itens mecânicos e fixadores em quantidade.",
-    limitations: "Tempo de trânsito internacional e variação de controle de qualidade entre vendedores.",
-    purchase_experience: "Comprar somente de lojas oficiais com classificação superior a 95%.",
-    notes: "Utilizar para perfis V-Slot, parafusos inox M2/M3/M4 e barras roscadas.",
-    logo_url: "https://images.unsplash.com/photo-1526304640581-d334cdbbf45e?w=128&auto=format&fit=crop&q=80",
-  }
-];
-
-// Helper to check if real Supabase environment variables are present
-export function isSupabaseConfigured(): boolean {
-  const url = process.env.NEXT_PUBLIC_SUPABASE_URL;
-  const key = process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY;
-  return Boolean(
-    url &&
-    !url.includes("your-project") &&
-    !url.includes("dummy") &&
-    key &&
-    !key.includes("dummy") &&
-    key.length > 20
-  );
-}
-
-// Local storage key for offline / preview mode fallback
-const LOCAL_STORAGE_KEY = "supplierhub_local_suppliers_v1";
-
-function getLocalSuppliers(): Supplier[] {
-  if (typeof window === "undefined") return [];
-  try {
-    const raw = localStorage.getItem(LOCAL_STORAGE_KEY);
-    if (!raw) {
-      // Initialize with demo suppliers if empty
-      const initial: Supplier[] = DEMO_INITIAL_SUPPLIERS.map((s, idx) => ({
-        ...s,
-        id: `demo-${idx + 1}-${Date.now()}`,
-        created_by: "local-user-id",
-        created_at: new Date(Date.now() - idx * 86400000).toISOString(),
-        updated_at: new Date(Date.now() - idx * 86400000).toISOString(),
-      }));
-      localStorage.setItem(LOCAL_STORAGE_KEY, JSON.stringify(initial));
-      return initial;
-    }
-    return JSON.parse(raw);
-  } catch (err) {
-    console.error("Erro ao ler dados locais:", err);
-    return [];
-  }
-}
-
-function setLocalSuppliers(suppliers: Supplier[]): void {
-  if (typeof window === "undefined") return;
-  try {
-    localStorage.setItem(LOCAL_STORAGE_KEY, JSON.stringify(suppliers));
-  } catch (err) {
-    console.error("Erro ao salvar dados locais:", err);
-  }
-}
+import {
+  Supplier,
+  CreateSupplierInput,
+  UpdateSupplierInput,
+  SupplierFilters,
+  SupplierStats,
+} from "@/types/supplier";
 
 export const supplierService = {
-  // Obter lista com filtros e busca com debounce
+  // Obter lista com filtros e busca
   async getSuppliers(filters?: Partial<SupplierFilters>): Promise<Supplier[]> {
-    if (!isSupabaseConfigured()) {
-      let result = getLocalSuppliers();
-
-      if (filters) {
-        if (filters.search) {
-          const s = filters.search.toLowerCase().trim();
-          result = result.filter(
-            (item) =>
-              item.name.toLowerCase().includes(s) ||
-              item.category.toLowerCase().includes(s) ||
-              (item.city && item.city.toLowerCase().includes(s)) ||
-              (item.state && item.state.toLowerCase().includes(s)) ||
-              (item.country && item.country.toLowerCase().includes(s)) ||
-              (item.description && item.description.toLowerCase().includes(s))
-          );
-        }
-        if (filters.category) {
-          result = result.filter((item) => item.category === filters.category);
-        }
-        if (filters.status) {
-          result = result.filter((item) => item.status === filters.status);
-        }
-        if (filters.state) {
-          result = result.filter((item) => item.state === filters.state);
-        }
-        if (filters.country) {
-          result = result.filter((item) => item.country === filters.country);
-        }
-        if (filters.favoriteOnly) {
-          result = result.filter((item) => item.favorite === true);
-        }
-
-        // Ordenação
-        if (filters.sortBy) {
-          switch (filters.sortBy) {
-            case "name_asc":
-              result.sort((a, b) => a.name.localeCompare(b.name));
-              break;
-            case "name_desc":
-              result.sort((a, b) => b.name.localeCompare(a.name));
-              break;
-            case "created_desc":
-              result.sort((a, b) => new Date(b.created_at).getTime() - new Date(a.created_at).getTime());
-              break;
-            case "created_asc":
-              result.sort((a, b) => new Date(a.created_at).getTime() - new Date(b.created_at).getTime());
-              break;
-            case "updated_desc":
-              result.sort((a, b) => new Date(b.updated_at).getTime() - new Date(a.updated_at).getTime());
-              break;
-            case "rating_desc":
-              result.sort((a, b) => (b.rating || 0) - (a.rating || 0));
-              break;
-          }
-        }
-      }
-      return result;
-    }
-
     const supabase = createClient();
     let query = supabase.from("suppliers").select("*");
 
     if (filters) {
       if (filters.search) {
         const s = `%${filters.search.trim()}%`;
-        query = query.or(`name.ilike.${s},category.ilike.${s},city.ilike.${s},state.ilike.${s},country.ilike.${s}`);
+        query = query.or(
+          `name.ilike.${s},category.ilike.${s},city.ilike.${s},state.ilike.${s},country.ilike.${s},description.ilike.${s}`
+        );
       }
       if (filters.category) {
         query = query.eq("category", filters.category);
@@ -317,11 +75,6 @@ export const supplierService = {
 
   // Obter um fornecedor específico por ID
   async getSupplierById(id: string): Promise<Supplier | null> {
-    if (!isSupabaseConfigured()) {
-      const list = getLocalSuppliers();
-      return list.find((s) => s.id === id) || null;
-    }
-
     const supabase = createClient();
     const { data, error } = await supabase
       .from("suppliers")
@@ -337,28 +90,15 @@ export const supplierService = {
     return data;
   },
 
-  // Criar novo fornecedor
+  // Criar novo fornecedor no Supabase
   async createSupplier(input: CreateSupplierInput): Promise<Supplier> {
-    if (!isSupabaseConfigured()) {
-      const list = getLocalSuppliers();
-      const newSupplier: Supplier = {
-        ...input,
-        id: `sup-${Date.now()}`,
-        created_by: "local-user-id",
-        created_at: new Date().toISOString(),
-        updated_at: new Date().toISOString(),
-      };
-      setLocalSuppliers([newSupplier, ...list]);
-      return newSupplier;
-    }
-
     const supabase = createClient();
     const {
       data: { user },
     } = await supabase.auth.getUser();
 
     if (!user) {
-      throw new Error("Usuário não autenticado.");
+      throw new Error("Sua sessão expirou. Faça login novamente para cadastrar fornecedores.");
     }
 
     const payload = {
@@ -381,20 +121,6 @@ export const supplierService = {
 
   // Atualizar fornecedor existente
   async updateSupplier(id: string, input: UpdateSupplierInput): Promise<Supplier> {
-    if (!isSupabaseConfigured()) {
-      const list = getLocalSuppliers();
-      const index = list.findIndex((s) => s.id === id);
-      if (index === -1) throw new Error("Fornecedor não encontrado.");
-      const updated: Supplier = {
-        ...list[index],
-        ...input,
-        updated_at: new Date().toISOString(),
-      };
-      list[index] = updated;
-      setLocalSuppliers(list);
-      return updated;
-    }
-
     const supabase = createClient();
     const payload = {
       ...input,
@@ -417,12 +143,6 @@ export const supplierService = {
 
   // Excluir fornecedor
   async deleteSupplier(id: string): Promise<void> {
-    if (!isSupabaseConfigured()) {
-      const list = getLocalSuppliers();
-      setLocalSuppliers(list.filter((s) => s.id !== id));
-      return;
-    }
-
     const supabase = createClient();
     const { error } = await supabase.from("suppliers").delete().eq("id", id);
     if (error) {
@@ -431,20 +151,9 @@ export const supplierService = {
     }
   },
 
-  // Alternar status de favorito com feedback instantâneo
+  // Alternar status de favorito
   async toggleFavorite(id: string, currentStatus: boolean): Promise<boolean> {
     const nextStatus = !currentStatus;
-    if (!isSupabaseConfigured()) {
-      const list = getLocalSuppliers();
-      const item = list.find((s) => s.id === id);
-      if (item) {
-        item.favorite = nextStatus;
-        item.updated_at = new Date().toISOString();
-        setLocalSuppliers(list);
-      }
-      return nextStatus;
-    }
-
     const supabase = createClient();
     const { error } = await supabase
       .from("suppliers")
@@ -503,68 +212,15 @@ export const supplierService = {
     };
   },
 
-  // Popular com dados de demonstração iniciais
-  async seedDemoSuppliers(): Promise<number> {
-    if (!isSupabaseConfigured()) {
-      const current = getLocalSuppliers();
-      const existingNames = new Set(current.map((s) => s.name.toLowerCase()));
-      const toAdd = DEMO_INITIAL_SUPPLIERS.filter(
-        (s) => !existingNames.has(s.name.toLowerCase())
-      );
-
-      const newItems: Supplier[] = toAdd.map((s, idx) => ({
-        ...s,
-        id: `seed-${idx + 1}-${Date.now()}`,
-        created_by: "local-user-id",
-        created_at: new Date(Date.now() - idx * 3600000).toISOString(),
-        updated_at: new Date(Date.now() - idx * 3600000).toISOString(),
-      }));
-
-      setLocalSuppliers([...newItems, ...current]);
-      return newItems.length;
-    }
-
-    const supabase = createClient();
-    const {
-      data: { user },
-    } = await supabase.auth.getUser();
-
-    if (!user) throw new Error("Faça login para popular fornecedores.");
-
-    const payloads = DEMO_INITIAL_SUPPLIERS.map((s) => ({
-      ...s,
-      created_by: user.id,
-    }));
-
-    const { data, error } = await supabase.from("suppliers").insert(payloads).select();
-    if (error) {
-      console.error("Erro ao popular dados de exemplo:", error);
-      throw error;
-    }
-    return data ? data.length : 0;
-  },
-
   // Upload de logotipo para o Supabase Storage
   async uploadLogo(file: File): Promise<string> {
-    // Validar tipo de arquivo
     const validTypes = ["image/jpeg", "image/png", "image/webp", "image/svg+xml"];
     if (!validTypes.includes(file.type)) {
-      throw new Error("Formato de arquivo inválido. Envie JPG, PNG, WebP ou SVG.");
+      throw new Error("Formato de arquivo inválido. Envie uma imagem JPG, PNG, WebP ou SVG.");
     }
 
-    // Validar tamanho máximo (2MB)
     if (file.size > 2 * 1024 * 1024) {
       throw new Error("O tamanho máximo do logotipo é 2MB.");
-    }
-
-    if (!isSupabaseConfigured()) {
-      // Em modo de demonstração local, cria data URL
-      return new Promise((resolve, reject) => {
-        const reader = new FileReader();
-        reader.onload = () => resolve(reader.result as string);
-        reader.onerror = reject;
-        reader.readAsDataURL(file);
-      });
     }
 
     const supabase = createClient();
@@ -581,7 +237,7 @@ export const supplierService = {
 
     if (uploadError) {
       console.error("Erro no upload do logotipo:", uploadError);
-      throw uploadError;
+      throw new Error("Falha ao salvar a imagem no servidor. Tente novamente.");
     }
 
     const { data } = supabase.storage

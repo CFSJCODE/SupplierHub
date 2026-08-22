@@ -2,7 +2,7 @@
 
 import React, { useEffect, useState } from "react";
 import { AppShell } from "@/components/layout/AppShell";
-import { supplierService, isSupabaseConfigured } from "@/lib/services/supplierService";
+import { supplierService } from "@/lib/services/supplierService";
 import { createClient } from "@/lib/supabase/client";
 import { Button } from "@/components/ui/Button";
 import { exportSuppliersToCSV, exportSuppliersToJSON } from "@/lib/utils/export";
@@ -10,7 +10,6 @@ import {
   Settings,
   Database,
   Download,
-  Sparkles,
   ShieldCheck,
   Server,
   UserCheck,
@@ -25,9 +24,7 @@ import { toast } from "sonner";
 export default function ConfiguracoesPage() {
   const [userEmail, setUserEmail] = useState<string | null>("compras@empresa.com");
   const [totalCount, setTotalCount] = useState<number>(0);
-  const [seeding, setSeeding] = useState(false);
   const [exporting, setExporting] = useState(false);
-  const isConnected = isSupabaseConfigured();
 
   useEffect(() => {
     const supabase = createClient();
@@ -41,21 +38,6 @@ export default function ConfiguracoesPage() {
       setTotalCount(suppliers.length);
     });
   }, []);
-
-  const handleSeedDemo = async () => {
-    try {
-      setSeeding(true);
-      const count = await supplierService.seedDemoSuppliers();
-      toast.success(`${count} fornecedores de exemplo adicionados com sucesso!`);
-      const updated = await supplierService.getSuppliers();
-      setTotalCount(updated.length);
-    } catch (err: unknown) {
-      const msg = err instanceof Error ? err.message : "Erro ao carregar exemplos.";
-      toast.error(msg);
-    } finally {
-      setSeeding(false);
-    }
-  };
 
   const handleExportCSV = async () => {
     try {
@@ -75,9 +57,9 @@ export default function ConfiguracoesPage() {
       setExporting(true);
       const data = await supplierService.getSuppliers();
       exportSuppliersToJSON(data);
-      toast.success("Backup JSON exportado com sucesso.");
+      toast.success("Cópia de segurança JSON exportada com sucesso.");
     } catch {
-      toast.error("Erro ao exportar backup JSON.");
+      toast.error("Erro ao exportar cópia de segurança JSON.");
     } finally {
       setExporting(false);
     }
@@ -104,26 +86,13 @@ export default function ConfiguracoesPage() {
                 Armazenamento de Dados
               </span>
               <div className="flex items-center space-x-2">
-                {isConnected ? (
-                  <>
-                    <CheckCircle2 className="w-4 h-4 text-emerald-600 shrink-0" />
-                    <span className="font-bold text-slate-900">
-                      Sincronização em Nuvem Ativa
-                    </span>
-                  </>
-                ) : (
-                  <>
-                    <div className="w-2.5 h-2.5 rounded-full bg-amber-500 shrink-0" />
-                    <span className="font-bold text-slate-900">
-                      Modo Demonstração
-                    </span>
-                  </>
-                )}
+                <CheckCircle2 className="w-4 h-4 text-emerald-600 shrink-0" />
+                <span className="font-bold text-slate-900">
+                  Sincronização em Nuvem Ativa
+                </span>
               </div>
               <p className="text-xs text-slate-600 leading-relaxed">
-                {isConnected
-                  ? "Suas alterações e cadastros são sincronizados automaticamente e protegidos em ambiente seguro."
-                  : "Ambiente de demonstração ativo para testes locais de navegação."}
+                Seus cadastros de fornecedores e atualizações são sincronizados em tempo real no banco de dados e protegidos com criptografia.
               </p>
             </div>
 
@@ -179,33 +148,7 @@ export default function ConfiguracoesPage() {
           </div>
         </section>
 
-        {/* Dados de Exemplo */}
-        <section className="bg-white border border-slate-200 rounded-xl p-6 shadow-card space-y-4">
-          <div className="flex items-center space-x-2 border-b border-slate-100 pb-3.5">
-            <Sparkles className="w-4 h-4 text-emerald-600 shrink-0" />
-            <h2 className="text-sm font-bold text-slate-900 tracking-tight">
-              Dados de Exemplo
-            </h2>
-          </div>
-
-          <p className="text-xs text-slate-600 leading-relaxed">
-            Adicione uma lista com dados de exemplo de fornecedores (contatos, avaliações e histórico) para testar os filtros, relatórios e recursos do sistema.
-          </p>
-
-          <div className="pt-1">
-            <Button
-              variant="secondary"
-              size="sm"
-              onClick={handleSeedDemo}
-              isLoading={seeding}
-              leftIcon={<Sparkles className="w-3.5 h-3.5" />}
-            >
-              Carregar Fornecedores de Exemplo
-            </Button>
-          </div>
-        </section>
-
-        {/* Segurança e Privacidade */}
+        {/* Segurança e Recursos da Plataforma */}
         <section className="bg-white border border-slate-200 rounded-xl p-6 shadow-card space-y-3">
           <div className="flex items-center space-x-2 border-b border-slate-100 pb-3.5">
             <ShieldCheck className="w-4 h-4 text-emerald-600 shrink-0" />
