@@ -13,9 +13,12 @@ import {
   Cpu,
   UserCheck,
   Sparkles,
+  ShieldCheck,
+  Crown,
 } from "lucide-react";
 import { cn } from "@/lib/utils/cn";
 import { createClient } from "@/lib/supabase/client";
+import { isSystemAdmin, getUserRoleBadge } from "@/lib/constants/admin";
 import { toast } from "sonner";
 
 interface NavItem {
@@ -28,7 +31,7 @@ interface NavItem {
 export function AppSidebar() {
   const pathname = usePathname();
   const router = useRouter();
-  const [userEmail, setUserEmail] = useState<string | null>("compras@empresa.com");
+  const [userEmail, setUserEmail] = useState<string | null>(null);
 
   useEffect(() => {
     const supabase = createClient();
@@ -38,6 +41,9 @@ export function AppSidebar() {
       }
     });
   }, []);
+
+  const isAdmin = isSystemAdmin(userEmail);
+  const roleInfo = getUserRoleBadge(userEmail);
 
   const handleSignOut = async () => {
     try {
@@ -206,16 +212,33 @@ export function AppSidebar() {
       <div className="p-3 border-t border-forest-900 bg-forest-950/80">
         <div className="flex items-center justify-between px-2 py-1.5">
           <div className="flex items-center space-x-2.5 min-w-0 pr-2">
-            <div className="w-8 h-8 rounded-full bg-emerald-950 border border-emerald-800/80 flex items-center justify-center text-emerald-300 shrink-0">
-              <UserCheck className="w-4 h-4" />
+            <div
+              className={cn(
+                "w-8 h-8 rounded-full flex items-center justify-center shrink-0 border",
+                isAdmin
+                  ? "bg-amber-950/80 border-amber-500/80 text-amber-400"
+                  : "bg-emerald-950 border-emerald-800/80 text-emerald-300"
+              )}
+            >
+              {isAdmin ? <Crown className="w-4 h-4" /> : <UserCheck className="w-4 h-4" />}
             </div>
             <div className="min-w-0 flex-1">
               <p className="text-xs font-semibold text-white truncate leading-tight">
-                {userEmail}
+                {userEmail || "Carregando..."}
               </p>
-              <p className="text-[10px] text-slate-400 font-mono">
-                Conta Ativa
-              </p>
+              <div className="flex items-center gap-1 mt-0.5">
+                {isAdmin && (
+                  <span className="w-1.5 h-1.5 rounded-full bg-amber-400 animate-pulse" />
+                )}
+                <p
+                  className={cn(
+                    "text-[10px] font-mono",
+                    isAdmin ? "text-amber-300 font-bold" : "text-slate-400"
+                  )}
+                >
+                  {roleInfo.label}
+                </p>
+              </div>
             </div>
           </div>
           <button

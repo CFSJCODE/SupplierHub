@@ -6,6 +6,7 @@ import { supplierService } from "@/lib/services/supplierService";
 import { createClient } from "@/lib/supabase/client";
 import { Button } from "@/components/ui/Button";
 import { exportSuppliersToCSV, exportSuppliersToJSON } from "@/lib/utils/export";
+import { isSystemAdmin, getUserRoleBadge } from "@/lib/constants/admin";
 import {
   Settings,
   Database,
@@ -18,11 +19,14 @@ import {
   FileCode,
   Lock,
   Cloud,
+  Crown,
+  Sparkles,
+  Users,
 } from "lucide-react";
 import { toast } from "sonner";
 
 export default function ConfiguracoesPage() {
-  const [userEmail, setUserEmail] = useState<string | null>("compras@empresa.com");
+  const [userEmail, setUserEmail] = useState<string | null>(null);
   const [totalCount, setTotalCount] = useState<number>(0);
   const [exporting, setExporting] = useState(false);
 
@@ -38,6 +42,9 @@ export default function ConfiguracoesPage() {
       setTotalCount(suppliers.length);
     });
   }, []);
+
+  const isAdmin = isSystemAdmin(userEmail);
+  const roleInfo = getUserRoleBadge(userEmail);
 
   const handleExportCSV = async () => {
     try {
@@ -68,9 +75,60 @@ export default function ConfiguracoesPage() {
   return (
     <AppShell
       title="Configurações do Sistema"
-      subtitle="Status da conta, gerenciamento de dados e exportação de relatórios"
+      subtitle="Status da conta, permissões e gerenciamento de dados"
     >
       <div className="max-w-4xl mx-auto space-y-6">
+        {/* Painel Exclusivo de Administrador do Sistema */}
+        {isAdmin && (
+          <section className="bg-linear-to-r from-amber-500/10 via-emerald-500/10 to-transparent border border-amber-300/60 rounded-xl p-6 shadow-card space-y-3">
+            <div className="flex items-center justify-between border-b border-amber-200/60 pb-3.5">
+              <div className="flex items-center space-x-2.5">
+                <div className="w-8 h-8 rounded-lg bg-amber-500 text-white flex items-center justify-center shadow-xs">
+                  <Crown className="w-4 h-4" />
+                </div>
+                <div>
+                  <h2 className="text-sm font-bold text-slate-900 tracking-tight">
+                    Painel do Administrador Master
+                  </h2>
+                  <p className="text-xs text-amber-800 font-medium">
+                    Acesso irrestrito ao banco de dados e controle global
+                  </p>
+                </div>
+              </div>
+              <span className="px-2.5 py-1 text-xs font-mono font-bold bg-amber-500 text-white rounded-full shadow-2xs">
+                Root Admin
+              </span>
+            </div>
+
+            <div className="grid grid-cols-1 sm:grid-cols-3 gap-3 text-xs pt-1">
+              <div className="p-3.5 bg-white/80 border border-amber-200/70 rounded-xl space-y-1">
+                <span className="text-[10px] uppercase font-mono text-slate-500 font-semibold block">
+                  Permissão RLS
+                </span>
+                <span className="font-bold text-slate-900 flex items-center gap-1">
+                  <ShieldCheck className="w-3.5 h-3.5 text-emerald-600" /> Acesso Global
+                </span>
+              </div>
+              <div className="p-3.5 bg-white/80 border border-amber-200/70 rounded-xl space-y-1">
+                <span className="text-[10px] uppercase font-mono text-slate-500 font-semibold block">
+                  Conta Vinculada
+                </span>
+                <span className="font-bold text-slate-900 truncate block">
+                  {userEmail}
+                </span>
+              </div>
+              <div className="p-3.5 bg-white/80 border border-amber-200/70 rounded-xl space-y-1">
+                <span className="text-[10px] uppercase font-mono text-slate-500 font-semibold block">
+                  Autenticação
+                </span>
+                <span className="font-bold text-emerald-700 flex items-center gap-1">
+                  <CheckCircle2 className="w-3.5 h-3.5 text-emerald-600" /> Google OAuth 2.0
+                </span>
+              </div>
+            </div>
+          </section>
+        )}
+
         {/* Painel de Status da Conta e Conexão */}
         <section className="bg-white border border-slate-200 rounded-xl p-6 shadow-card space-y-4">
           <div className="flex items-center space-x-2 border-b border-slate-100 pb-3.5">
@@ -101,13 +159,24 @@ export default function ConfiguracoesPage() {
                 Usuário Conectado
               </span>
               <div className="flex items-center space-x-2">
-                <UserCheck className="w-4 h-4 text-emerald-600 shrink-0" />
+                {isAdmin ? (
+                  <Crown className="w-4 h-4 text-amber-500 shrink-0" />
+                ) : (
+                  <UserCheck className="w-4 h-4 text-emerald-600 shrink-0" />
+                )}
                 <span className="font-bold text-slate-900 truncate">
-                  {userEmail}
+                  {userEmail || "Carregando..."}
+                </span>
+                <span
+                  className={`px-2 py-0.5 rounded text-[10px] font-mono font-bold ${
+                    isAdmin ? "bg-amber-100 text-amber-800" : "bg-slate-200 text-slate-700"
+                  }`}
+                >
+                  {roleInfo.label}
                 </span>
               </div>
               <p className="text-xs text-slate-600 leading-relaxed">
-                Total de fornecedores vinculados à sua conta: <strong className="text-slate-900">{totalCount}</strong>
+                Total de fornecedores gerenciados: <strong className="text-slate-900">{totalCount}</strong>
               </p>
             </div>
           </div>

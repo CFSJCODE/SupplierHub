@@ -1,6 +1,6 @@
 "use client";
 
-import React, { useEffect } from "react";
+import React, { useEffect, useState } from "react";
 import Link from "next/link";
 import { usePathname, useRouter } from "next/navigation";
 import {
@@ -13,9 +13,11 @@ import {
   Cpu,
   X,
   UserCheck,
+  Crown,
 } from "lucide-react";
 import { cn } from "@/lib/utils/cn";
 import { createClient } from "@/lib/supabase/client";
+import { isSystemAdmin, getUserRoleBadge } from "@/lib/constants/admin";
 import { toast } from "sonner";
 
 export interface MobileNavProps {
@@ -26,6 +28,19 @@ export interface MobileNavProps {
 export function MobileNav({ isOpen, onClose }: MobileNavProps) {
   const pathname = usePathname();
   const router = useRouter();
+  const [userEmail, setUserEmail] = useState<string | null>(null);
+
+  useEffect(() => {
+    const supabase = createClient();
+    supabase.auth.getUser().then(({ data }) => {
+      if (data.user?.email) {
+        setUserEmail(data.user.email);
+      }
+    });
+  }, []);
+
+  const isAdmin = isSystemAdmin(userEmail);
+  const roleInfo = getUserRoleBadge(userEmail);
 
   // Close drawer automatically whenever route changes
   useEffect(() => {
@@ -146,12 +161,29 @@ export function MobileNav({ isOpen, onClose }: MobileNavProps) {
         <div className="p-4 border-t border-forest-900 bg-forest-950/80">
           <div className="flex items-center justify-between">
             <div className="flex items-center space-x-2 min-w-0 pr-2">
-              <div className="w-7 h-7 rounded-full bg-emerald-950 border border-emerald-800 flex items-center justify-center text-emerald-300 shrink-0">
-                <UserCheck className="w-3.5 h-3.5" />
+              <div
+                className={cn(
+                  "w-7 h-7 rounded-full flex items-center justify-center shrink-0 border",
+                  isAdmin
+                    ? "bg-amber-950/80 border-amber-500/80 text-amber-400"
+                    : "bg-emerald-950 border-emerald-800 text-emerald-300"
+                )}
+              >
+                {isAdmin ? <Crown className="w-3.5 h-3.5" /> : <UserCheck className="w-3.5 h-3.5" />}
               </div>
-              <span className="text-xs font-medium text-white truncate">
-                Conta Ativa
-              </span>
+              <div className="min-w-0">
+                <p className="text-xs font-medium text-white truncate">
+                  {userEmail || "Usuário"}
+                </p>
+                <p
+                  className={cn(
+                    "text-[10px] font-mono",
+                    isAdmin ? "text-amber-300 font-bold" : "text-slate-400"
+                  )}
+                >
+                  {roleInfo.label}
+                </p>
+              </div>
             </div>
             <button
               onClick={handleSignOut}
