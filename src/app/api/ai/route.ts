@@ -19,7 +19,7 @@ export async function POST(req: Request) {
       prompt: prompt || "Resuma os principais critérios de escolha de fornecedores de eletrônica.",
     });
 
-    return result.toDataStreamResponse();
+    return result.toTextStreamResponse();
   } catch (error: unknown) {
     const msg = error instanceof Error ? error.message : "Erro ao processar requisição no AI Gateway.";
     return new Response(JSON.stringify({ error: msg }), { status: 500, headers: { "Content-Type": "application/json" } });

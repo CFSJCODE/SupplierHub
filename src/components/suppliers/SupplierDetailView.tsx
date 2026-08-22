@@ -1,6 +1,6 @@
 "use client";
 
-import React from "react";
+import React, { useState } from "react";
 import Link from "next/link";
 import { Supplier } from "@/types/supplier";
 import { StatusBadge } from "./StatusBadge";
@@ -8,6 +8,7 @@ import { CategoryBadge } from "./CategoryBadge";
 import { RatingStars } from "./RatingStars";
 import { Button } from "@/components/ui/Button";
 import { formatDate, formatDateTime, formatPhoneNumber, formatWhatsAppUrl, cleanUrl } from "@/lib/utils/formatters";
+import { SupplierAIAnalysisModal } from "./SupplierAIAnalysisModal";
 import {
   ExternalLink,
   Edit2,
@@ -28,7 +29,8 @@ import {
   ShieldCheck,
   Calendar,
   Key,
-  FileText
+  FileText,
+  Sparkles
 } from "lucide-react";
 import { cn } from "@/lib/utils/cn";
 
@@ -43,6 +45,7 @@ export function SupplierDetailView({
   onToggleFavorite,
   onDelete,
 }: SupplierDetailViewProps) {
+  const [showAIModal, setShowAIModal] = useState(false);
   const hasLocation = supplier.city || supplier.state || supplier.country || supplier.address;
   const addressQuery = [supplier.address, supplier.city, supplier.state, supplier.country].filter(Boolean).join(", ");
   const mapsUrl = addressQuery ? `https://www.google.com/maps/search/?api=1&query=${encodeURIComponent(addressQuery)}` : null;
@@ -116,6 +119,14 @@ export function SupplierDetailView({
 
           {/* Quick Action Toolbar */}
           <div className="flex flex-wrap items-center gap-2 shrink-0">
+            <Button
+              variant="outline"
+              size="sm"
+              onClick={() => setShowAIModal(true)}
+              leftIcon={<Sparkles className="w-3.5 h-3.5 text-brand-copper" />}
+            >
+              Parecer IA
+            </Button>
             {supplier.website && (
               <a
                 href={supplier.website}
@@ -368,6 +379,13 @@ export function SupplierDetailView({
           </span>
         </div>
       </div>
+
+      {/* Modal de Análise de IA */}
+      <SupplierAIAnalysisModal
+        isOpen={showAIModal}
+        onClose={() => setShowAIModal(false)}
+        supplier={supplier}
+      />
     </div>
   );
 }
