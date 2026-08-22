@@ -15,12 +15,12 @@ import {
   CheckCircle2,
   AlertCircle,
   Sparkles,
-  Bot,
   Layers,
-  Database,
   Check,
   Eye,
   EyeOff,
+  Star,
+  Users,
 } from "lucide-react";
 import { toast } from "sonner";
 
@@ -58,14 +58,14 @@ export default function LoginPage() {
   const [isGoogleLoading, setIsGoogleLoading] = useState(false);
   const [errorMessage, setErrorMessage] = useState<string | null>(null);
 
-  // Login com Google via Supabase OAuth
+  // Login com Google
   const handleGoogleLogin = async () => {
     setErrorMessage(null);
     setIsGoogleLoading(true);
 
     try {
       if (!isSupabaseConfigured()) {
-        toast.success("Login simulado via Google (Ambiente de Demonstração Local)!");
+        toast.success("Login simulado via Google (Modo de Demonstração)!");
         router.push("/dashboard");
         router.refresh();
         return;
@@ -96,7 +96,7 @@ export default function LoginPage() {
       const msg =
         err instanceof Error
           ? err.message
-          : "Erro ao autenticar com a conta Google. Verifique se o provedor está habilitado no Supabase.";
+          : "Erro ao autenticar com a conta Google. Tente novamente ou use seu e-mail.";
       setErrorMessage(msg);
       toast.error(msg);
       setIsGoogleLoading(false);
@@ -124,8 +124,8 @@ export default function LoginPage() {
       if (!isSupabaseConfigured()) {
         toast.success(
           isSignUp
-            ? "Conta simulada criada com sucesso (Modo Local)!"
-            : "Login efetuado com sucesso (Modo Local)!"
+            ? "Conta criada com sucesso (Modo Demonstração)!"
+            : "Login efetuado com sucesso (Modo Demonstração)!"
         );
         router.push("/dashboard");
         router.refresh();
@@ -151,7 +151,7 @@ export default function LoginPage() {
           router.push("/dashboard");
           router.refresh();
         } else {
-          toast.success("Conta criada! Verifique seu e-mail para confirmar seu cadastro.");
+          toast.success("Conta criada! Verifique seu e-mail para confirmar seu acesso.");
           setIsSignUp(false);
         }
       } else {
@@ -188,13 +188,10 @@ export default function LoginPage() {
       {/* 
         ========================================================================
         COLUNA 1: SHOWCASE INSTITUCIONAL (Desktop >= 1024px, oculto em Mobile)
-        Aproveitamento dinâmico do espaço com background Dark Forest, 
-        apresentação de recursos, métricas e selos de segurança.
         ========================================================================
       */}
       <section className="hidden lg:flex lg:col-span-6 xl:col-span-7 2xl:col-span-8 bg-forest-950 text-slate-100 flex-col justify-between p-8 sm:p-12 lg:p-14 xl:p-16 relative overflow-hidden border-r border-forest-900">
-        {/* Glow de fundo e grade técnica */}
-        <div className="absolute inset-0 bg-engineering-grid opacity-10 pointer-events-none" />
+        <div className="absolute inset-0 bg-engineering-grid opacity-5 pointer-events-none" />
         <div className="absolute top-0 right-0 w-96 h-96 bg-emerald-500/10 rounded-full blur-3xl pointer-events-none" />
         <div className="absolute bottom-0 left-0 w-80 h-80 bg-teal-500/10 rounded-full blur-3xl pointer-events-none" />
 
@@ -209,14 +206,14 @@ export default function LoginPage() {
                 SupplierHub
               </span>
               <span className="text-xs text-emerald-400 font-mono tracking-wider uppercase block font-semibold">
-                Engineering & Procurement Suite
+                Gestão de Fornecedores
               </span>
             </div>
           </div>
 
           <div className="inline-flex items-center space-x-2 bg-forest-900/80 border border-forest-800 px-3 py-1 rounded-full text-xs font-mono text-emerald-300 shadow-xs">
             <span className="w-2 h-2 rounded-full bg-emerald-400 animate-pulse" />
-            <span>Vercel AI SDK & Supabase Cloud Active</span>
+            <span>Ambiente Seguro & Conectado</span>
           </div>
         </div>
 
@@ -224,10 +221,10 @@ export default function LoginPage() {
         <div className="relative z-10 space-y-8 my-auto py-8">
           <div className="space-y-3 max-w-2xl">
             <h2 className="text-2xl sm:text-3xl xl:text-4xl font-extrabold text-white tracking-tight leading-tight">
-              Gestão Inteligente de Fornecedores para Engenharia & Compras
+              Gestão Completa de Fornecedores e Parceiros Comerciais
             </h2>
             <p className="text-sm xl:text-base text-slate-300 leading-relaxed">
-              Centralize catálogos técnicos, pareceres de compras assistidos por IA, contatos diretos e histórico de homologação em uma plataforma de alta velocidade.
+              Centralize catálogos, contatos de vendas, avaliações inteligentes e histórico de pedidos em uma única plataforma intuitiva e protegida.
             </p>
           </div>
 
@@ -235,60 +232,58 @@ export default function LoginPage() {
           <div className="grid grid-cols-1 sm:grid-cols-2 gap-4 max-w-3xl">
             {/* Recurso 1: IA */}
             <div className="p-4 bg-forest-900/60 border border-forest-800 rounded-xl space-y-1.5 backdrop-blur-xs">
-              <div className="flex items-center space-x-2 text-emerald-400 text-xs font-bold font-mono uppercase">
+              <div className="flex items-center space-x-2 text-emerald-400 text-xs font-bold uppercase">
                 <Sparkles className="w-4 h-4 shrink-0" />
-                <span>Parecer Técnico com IA</span>
+                <span>Análise Inteligente</span>
               </div>
               <p className="text-xs text-slate-300 leading-relaxed">
-                Diagnósticos automáticos de risco de lead time e conformidade via Vercel AI SDK.
+                Avaliações automáticas de prazos, atendimento e recomendações comerciais de compras.
               </p>
             </div>
 
-            {/* Recurso 2: RLS & PostgreSQL */}
+            {/* Recurso 2: Segurança */}
             <div className="p-4 bg-forest-900/60 border border-forest-800 rounded-xl space-y-1.5 backdrop-blur-xs">
-              <div className="flex items-center space-x-2 text-emerald-400 text-xs font-bold font-mono uppercase">
-                <Database className="w-4 h-4 shrink-0" />
-                <span>PostgreSQL & RLS</span>
-              </div>
-              <p className="text-xs text-slate-300 leading-relaxed">
-                Isolamento estrito de dados e segurança granular por usuário autenticado.
-              </p>
-            </div>
-
-            {/* Recurso 3: Categorias Técnicas */}
-            <div className="p-4 bg-forest-900/60 border border-forest-800 rounded-xl space-y-1.5 backdrop-blur-xs">
-              <div className="flex items-center space-x-2 text-emerald-400 text-xs font-bold font-mono uppercase">
-                <Layers className="w-4 h-4 shrink-0" />
-                <span>18 Segmentos de Engenharia</span>
-              </div>
-              <p className="text-xs text-slate-300 leading-relaxed">
-                Mapeamento de microcontroladores, usinagem, sensores, 3D e componentes.
-              </p>
-            </div>
-
-            {/* Recurso 4: Google Cloud OAuth */}
-            <div className="p-4 bg-forest-900/60 border border-forest-800 rounded-xl space-y-1.5 backdrop-blur-xs">
-              <div className="flex items-center space-x-2 text-emerald-400 text-xs font-bold font-mono uppercase">
+              <div className="flex items-center space-x-2 text-emerald-400 text-xs font-bold uppercase">
                 <ShieldCheck className="w-4 h-4 shrink-0" />
-                <span>Google OAuth 2.0 PKCE</span>
+                <span>Privacidade & Segurança</span>
               </div>
               <p className="text-xs text-slate-300 leading-relaxed">
-                Login corporativo sem senhas com padrão de autenticação moderna e segura.
+                Seus dados e listas de fornecedores protegidos com acesso restrito e seguro.
+              </p>
+            </div>
+
+            {/* Recurso 3: Categorias */}
+            <div className="p-4 bg-forest-900/60 border border-forest-800 rounded-xl space-y-1.5 backdrop-blur-xs">
+              <div className="flex items-center space-x-2 text-emerald-400 text-xs font-bold uppercase">
+                <Layers className="w-4 h-4 shrink-0" />
+                <span>Categorias Organizadas</span>
+              </div>
+              <p className="text-xs text-slate-300 leading-relaxed">
+                Filtros por produtos, serviços, distribuidores, fabricantes e cidades.
+              </p>
+            </div>
+
+            {/* Recurso 4: Google OAuth */}
+            <div className="p-4 bg-forest-900/60 border border-forest-800 rounded-xl space-y-1.5 backdrop-blur-xs">
+              <div className="flex items-center space-x-2 text-emerald-400 text-xs font-bold uppercase">
+                <Users className="w-4 h-4 shrink-0" />
+                <span>Acesso Rápido com Google</span>
+              </div>
+              <p className="text-xs text-slate-300 leading-relaxed">
+                Login corporativo prático em 1 clique sem necessidade de memorizar senhas.
               </p>
             </div>
           </div>
         </div>
 
         {/* Rodapé do Showcase */}
-        <div className="relative z-10 flex flex-wrap items-center justify-between gap-4 pt-6 border-t border-forest-900/80 text-xs font-mono text-slate-400">
+        <div className="relative z-10 flex flex-wrap items-center justify-between gap-4 pt-6 border-t border-forest-900/80 text-xs text-slate-400">
           <div className="flex items-center space-x-4">
             <span className="flex items-center gap-1.5 text-emerald-400">
-              <Check className="w-3.5 h-3.5" /> 99.9% Uptime
+              <Check className="w-3.5 h-3.5" /> Alta Disponibilidade
             </span>
             <span>•</span>
-            <span>Next.js 15 App Router</span>
-            <span>•</span>
-            <span>Vercel Ready</span>
+            <span>Plataforma Corporativa</span>
           </div>
           <p>© {new Date().getFullYear()} SupplierHub</p>
         </div>
@@ -297,7 +292,6 @@ export default function LoginPage() {
       {/* 
         ========================================================================
         COLUNA 2: FORMULÁRIO DE LOGIN E CADASTRO
-        Adaptável para mobile (320px-639px), tablets (640px-1023px) e desktops.
         ========================================================================
       */}
       <main className="lg:col-span-6 xl:col-span-5 2xl:col-span-4 flex flex-col justify-center items-center p-4 sm:p-8 md:p-12 lg:p-10 xl:p-14 min-h-screen">
@@ -310,8 +304,8 @@ export default function LoginPage() {
             <h1 className="text-xl sm:text-2xl font-extrabold tracking-tight text-slate-900">
               SupplierHub
             </h1>
-            <p className="text-xs text-slate-500 font-mono">
-              Engineering Procurement Suite
+            <p className="text-xs text-slate-500">
+              Gestão de Fornecedores
             </p>
           </div>
 
@@ -320,12 +314,12 @@ export default function LoginPage() {
             {/* Título de Entrada */}
             <div className="space-y-1">
               <h2 className="text-lg sm:text-xl font-bold text-slate-900 tracking-tight">
-                {isSignUp ? "Criar nova conta corporativa" : "Acessar plataforma"}
+                {isSignUp ? "Criar nova conta" : "Acessar plataforma"}
               </h2>
               <p className="text-xs text-slate-500">
                 {isSignUp
-                  ? "Preencha seus dados para gerenciar sua rede de compras."
-                  : "Entre com sua conta Google ou utilize seu e-mail corporativo."}
+                  ? "Preencha seus dados para gerenciar seus fornecedores."
+                  : "Entre com sua conta Google ou utilize seu e-mail."}
               </p>
             </div>
 
@@ -397,9 +391,9 @@ export default function LoginPage() {
             {/* Formulário de E-mail e Senha */}
             <form onSubmit={handleSubmit} className="space-y-4">
               <Input
-                label="E-mail Corporativo"
+                label="E-mail"
                 type="email"
-                placeholder="nome@empresa.com.br"
+                placeholder="seu.email@empresa.com"
                 value={email}
                 onChange={(e) => setEmail(e.target.value)}
                 required
@@ -440,23 +434,22 @@ export default function LoginPage() {
               </Button>
             </form>
 
-            {/* Selos de Conformidade Técnica e Segurança */}
+            {/* Selos de Segurança e Privacidade */}
             <div className="pt-4 border-t border-slate-100 text-[11px] text-slate-500 space-y-1.5">
               <div className="flex items-center space-x-2">
                 <ShieldCheck className="w-3.5 h-3.5 text-emerald-600 shrink-0" />
-                <span>Autenticação isolada via Supabase Auth & Google Cloud OAuth.</span>
+                <span>Ambiente protegido com criptografia de ponta a ponta.</span>
               </div>
               <div className="flex items-center space-x-2">
                 <CheckCircle2 className="w-3.5 h-3.5 text-emerald-600 shrink-0" />
-                <span>Row Level Security (RLS): isolamento de fornecedores e cotações.</span>
+                <span>Privacidade garantida para seus dados e contatos.</span>
               </div>
             </div>
           </div>
 
           {/* Rodapé Mobile / Direitos */}
           <footer className="text-center text-xs text-slate-400 font-mono space-y-1">
-            <p>SupplierHub • Gestão Estratégica de Suprimentos</p>
-            <p className="text-[10px]">Next.js 15 • Vercel AI SDK • Supabase Cloud</p>
+            <p>SupplierHub • Gestão Estratégica de Fornecedores</p>
           </footer>
         </div>
       </main>

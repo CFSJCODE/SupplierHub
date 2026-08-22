@@ -45,15 +45,9 @@ export function TopHeader({
         )}
 
         <div className="min-w-0">
-          <div className="flex items-center space-x-2.5">
-            <h1 className="text-base sm:text-lg font-bold text-slate-900 tracking-tight truncate leading-tight">
-              {title}
-            </h1>
-            <span className="hidden md:inline-flex items-center space-x-1.5 px-2.5 py-0.5 bg-emerald-50 text-emerald-800 border border-emerald-200 rounded-full text-[10px] font-mono font-medium">
-              <span className="w-1.5 h-1.5 rounded-full bg-emerald-500 animate-pulse" />
-              <span>Supabase Cloud</span>
-            </span>
-          </div>
+          <h1 className="text-base sm:text-lg font-bold text-slate-900 tracking-tight truncate leading-tight">
+            {title}
+          </h1>
           {subtitle && (
             <p className="text-[11px] sm:text-xs text-slate-500 truncate mt-0.5">
               {subtitle}

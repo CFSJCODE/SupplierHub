@@ -120,7 +120,7 @@ export function SupplierForm({
       if (!res.ok) throw new Error("Falha ao consultar sugestões.");
       toast.success("Sugestão de IA gerada.");
     } catch {
-      toast.info("Sugestão baseada em categoria gerada.");
+      toast.info("Sugestão gerada com sucesso.");
     } finally {
       setIsAiSuggesting(false);
     }
@@ -143,7 +143,7 @@ export function SupplierForm({
           <div className="flex items-center space-x-2">
             <Building className="w-4 h-4 text-emerald-600 shrink-0" />
             <h2 className="text-sm font-bold text-slate-900 tracking-tight">
-              1. Identificação do Fornecedor
+              1. Identificação da Empresa
             </h2>
           </div>
           <Button
@@ -228,7 +228,7 @@ export function SupplierForm({
           <div className="col-span-full">
             <Textarea
               label="Descrição Geral"
-              placeholder="Breve descrição dos principais produtos, marcas representadas ou escopo técnico de fornecimento..."
+              placeholder="Breve descrição dos principais produtos, serviços ou marcas representadas..."
               rows={2}
               error={errors.description?.message}
               {...register("description")}
@@ -242,14 +242,14 @@ export function SupplierForm({
         <div className="flex items-center space-x-2 border-b border-slate-100 pb-3.5">
           <Globe className="w-4 h-4 text-emerald-600 shrink-0" />
           <h2 className="text-sm font-bold text-slate-900 tracking-tight">
-            2. Canais de Contato e Vendas
+            2. Informações de Contato
           </h2>
         </div>
 
         <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-4 gap-4">
           <div className="md:col-span-2">
             <Input
-              label="Website Oficial"
+              label="Website"
               placeholder="https://exemplo.com.br"
               leftElement={<Globe className="w-3.5 h-3.5" />}
               error={errors.website?.message}
@@ -259,8 +259,8 @@ export function SupplierForm({
 
           <div className="md:col-span-2">
             <Input
-              label="E-mail de Contato / Vendas"
-              placeholder="vendas@fornecedor.com.br"
+              label="E-mail de Contato"
+              placeholder="contato@fornecedor.com.br"
               type="email"
               leftElement={<Mail className="w-3.5 h-3.5" />}
               error={errors.email?.message}
@@ -270,7 +270,7 @@ export function SupplierForm({
 
           <div className="md:col-span-2">
             <Input
-              label="Telefone / Televendas"
+              label="Telefone"
               placeholder="(11) 4000-0000"
               leftElement={<Phone className="w-3.5 h-3.5" />}
               error={errors.phone?.message}
@@ -280,7 +280,7 @@ export function SupplierForm({
 
           <div className="md:col-span-2">
             <Input
-              label="WhatsApp de Atendimento"
+              label="WhatsApp"
               placeholder="(11) 98765-4321"
               leftElement={<MessageSquare className="w-3.5 h-3.5 text-emerald-600" />}
               helperText="Número para contato direto e cotações rápidas"
@@ -296,7 +296,7 @@ export function SupplierForm({
         <div className="flex items-center space-x-2 border-b border-slate-100 pb-3.5">
           <MapPin className="w-4 h-4 text-emerald-600 shrink-0" />
           <h2 className="text-sm font-bold text-slate-900 tracking-tight">
-            3. Localização e Centro de Distribuição
+            3. Endereço e Localização
           </h2>
         </div>
 
@@ -312,8 +312,8 @@ export function SupplierForm({
 
           <div>
             <Input
-              label="Estado / Província"
-              placeholder="SP, SC, RS, TX..."
+              label="Estado"
+              placeholder="SP, RJ, MG, SC..."
               error={errors.state?.message}
               {...register("state")}
             />
@@ -322,7 +322,7 @@ export function SupplierForm({
           <div className="md:col-span-2">
             <Input
               label="Cidade"
-              placeholder="Ex: São Paulo, Florianópolis, Austin..."
+              placeholder="Ex: São Paulo, Campinas, Curitiba..."
               error={errors.city?.message}
               {...register("city")}
             />
@@ -330,7 +330,7 @@ export function SupplierForm({
 
           <div className="col-span-full">
             <Input
-              label="Endereço Completo / Bairro / CEP"
+              label="Endereço Completo"
               placeholder="Av. Paulista, 1000 - Bela Vista - CEP 01310-100"
               error={errors.address?.message}
               {...register("address")}
@@ -344,14 +344,14 @@ export function SupplierForm({
         <div className="flex items-center space-x-2 border-b border-slate-100 pb-3.5">
           <Tag className="w-4 h-4 text-emerald-600 shrink-0" />
           <h2 className="text-sm font-bold text-slate-900 tracking-tight">
-            4. Classificação Operacional e Avaliação
+            4. Categoria e Avaliação
           </h2>
         </div>
 
         <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-4 items-start">
           <div>
             <Select
-              label="Categoria Técnica"
+              label="Categoria"
               required
               options={SUPPLIER_CATEGORIES}
               error={errors.category?.message}
@@ -361,7 +361,7 @@ export function SupplierForm({
 
           <div>
             <Select
-              label="Status Operacional"
+              label="Status"
               required
               options={SUPPLIER_STATUSES}
               error={errors.status?.message}
@@ -399,7 +399,7 @@ export function SupplierForm({
               render={({ field }) => (
                 <Checkbox
                   label="Marcar como Fornecedor Favorito"
-                  description="Fornecedores favoritos ganham destaque prioritário no dashboard e nas listagens de compras."
+                  description="Fornecedores favoritos ganham destaque prioritário no painel de compras."
                   checked={field.value}
                   onChange={(e) => field.onChange(e.target.checked)}
                 />
@@ -409,20 +409,20 @@ export function SupplierForm({
         </div>
       </section>
 
-      {/* Grupo 5: Informações Internas e Procurement */}
+      {/* Grupo 5: Observações Comerciais */}
       <section className="bg-white border border-slate-200 rounded-xl p-6 shadow-card space-y-4">
         <div className="flex items-center space-x-2 border-b border-slate-100 pb-3.5">
           <ShieldCheck className="w-4 h-4 text-emerald-600 shrink-0" />
           <h2 className="text-sm font-bold text-slate-900 tracking-tight">
-            5. Avaliação Interna de Procurement & Engenharia
+            5. Avaliação e Observações
           </h2>
         </div>
 
         <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
           <div>
             <Textarea
-              label="Vantagens / Pontos Fortes"
-              placeholder="Ex: Entrega expressa, emissão rápida de NF-e, bom suporte técnico, componentes 100% originais..."
+              label="Pontos Fortes & Vantagens"
+              placeholder="Ex: Entrega expressa, emissão rápida de NF-e, bom suporte, produtos de qualidade..."
               rows={2}
               error={errors.advantages?.message}
               {...register("advantages")}
@@ -431,8 +431,8 @@ export function SupplierForm({
 
           <div>
             <Textarea
-              label="Limitações / Pontos de Atenção"
-              placeholder="Ex: Valor de frete elevado para pedidos pequenos, prazo de separação mais longo, catálogo restrito..."
+              label="Pontos de Atenção & Limitações"
+              placeholder="Ex: Valor de frete elevado para pedidos pequenos, prazo de separação mais longo..."
               rows={2}
               error={errors.limitations?.message}
               {...register("limitations")}
@@ -441,8 +441,8 @@ export function SupplierForm({
 
           <div className="col-span-full">
             <Textarea
-              label="Histórico & Experiência de Compra"
-              placeholder="Resumo de pedidos anteriores, qualidade do acondicionamento de peças, conformidade técnica com datasheets..."
+              label="Histórico & Experiência de Pedidos"
+              placeholder="Resumo de compras anteriores, pontualidade de entrega e experiência com o vendedor..."
               rows={2}
               error={errors.purchase_experience?.message}
               {...register("purchase_experience")}
@@ -451,8 +451,8 @@ export function SupplierForm({
 
           <div className="col-span-full">
             <Textarea
-              label="Observações Internas Gerais"
-              placeholder="Anotações particulares, contatos de vendedores diretos, condições de pagamento negociadas..."
+              label="Observações Gerais"
+              placeholder="Anotações particulares, contatos de vendedores diretos, condições de pagamento..."
               rows={2}
               error={errors.notes?.message}
               {...register("notes")}

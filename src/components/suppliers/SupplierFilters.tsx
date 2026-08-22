@@ -26,7 +26,6 @@ export function SupplierFiltersBar({
   const [searchValue, setSearchValue] = useState(filters.search);
   const [mobileFiltersOpen, setMobileFiltersOpen] = useState(false);
 
-  // 300ms Debounce implementation for search as requested in Requirement #8
   useEffect(() => {
     const timer = setTimeout(() => {
       if (searchValue !== filters.search) {
@@ -62,7 +61,7 @@ export function SupplierFiltersBar({
             type="text"
             value={searchValue}
             onChange={(e) => setSearchValue(e.target.value)}
-            placeholder="Pesquisar por nome, categoria, cidade, tags, notas..."
+            placeholder="Pesquisar por nome, categoria, cidade, estado..."
             className="w-full h-10 pl-10 pr-8 text-sm bg-slate-50 hover:bg-white focus:bg-white text-slate-900 placeholder:text-slate-400 border border-slate-200 rounded-lg transition-all focus:outline-none focus:ring-2 focus:ring-emerald-500/20 focus:border-emerald-600 shadow-xs"
           />
           {searchValue && (
@@ -141,7 +140,7 @@ export function SupplierFiltersBar({
         {/* Category Filter */}
         <div className="space-y-1">
           <label className="text-[10px] font-semibold uppercase tracking-wider text-slate-500 font-mono">
-            Categoria Técnica
+            Categoria
           </label>
           <div className="relative">
             <select
@@ -163,7 +162,7 @@ export function SupplierFiltersBar({
         {/* Status Filter */}
         <div className="space-y-1">
           <label className="text-[10px] font-semibold uppercase tracking-wider text-slate-500 font-mono">
-            Status Operacional
+            Status
           </label>
           <div className="relative">
             <select
@@ -185,7 +184,7 @@ export function SupplierFiltersBar({
         {/* Country Filter */}
         <div className="space-y-1">
           <label className="text-[10px] font-semibold uppercase tracking-wider text-slate-500 font-mono">
-            Origem / País
+            País
           </label>
           <div className="relative">
             <select

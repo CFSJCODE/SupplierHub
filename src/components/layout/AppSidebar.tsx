@@ -13,7 +13,6 @@ import {
   Cpu,
   UserCheck,
   Sparkles,
-  ExternalLink,
 } from "lucide-react";
 import { cn } from "@/lib/utils/cn";
 import { createClient } from "@/lib/supabase/client";
@@ -29,7 +28,7 @@ interface NavItem {
 export function AppSidebar() {
   const pathname = usePathname();
   const router = useRouter();
-  const [userEmail, setUserEmail] = useState<string | null>("engenharia@local");
+  const [userEmail, setUserEmail] = useState<string | null>("compras@empresa.com");
 
   useEffect(() => {
     const supabase = createClient();
@@ -54,7 +53,7 @@ export function AppSidebar() {
 
   const navItems: NavItem[] = [
     {
-      label: "Dashboard",
+      label: "Painel Principal",
       href: "/dashboard",
       icon: LayoutDashboard,
     },
@@ -91,7 +90,7 @@ export function AppSidebar() {
               SupplierHub
             </span>
             <span className="text-[10px] text-emerald-400 font-mono tracking-wider uppercase block font-semibold">
-              Procurement & Eng.
+              Gestão de Fornecedores
             </span>
           </div>
         </Link>
@@ -112,7 +111,7 @@ export function AppSidebar() {
       <div className="flex-1 overflow-y-auto px-3 py-4 space-y-6">
         <div>
           <span className="px-3 text-[11px] font-semibold text-slate-400 uppercase tracking-wider font-mono block mb-2">
-            Visão Geral
+            Navegação
           </span>
           <nav className="space-y-1">
             {navItems.map((item) => {
@@ -156,7 +155,7 @@ export function AppSidebar() {
 
         <div>
           <span className="px-3 text-[11px] font-semibold text-slate-400 uppercase tracking-wider font-mono block mb-2">
-            Sistema & IA
+            Sistema
           </span>
           <nav className="space-y-1">
             {systemItems.map((item) => {
@@ -189,15 +188,15 @@ export function AppSidebar() {
           </nav>
         </div>
 
-        {/* AI & Cloud Status Chip */}
+        {/* Informação Útil e Amigável */}
         <div className="px-3 pt-2">
-          <div className="p-3 bg-forest-900/70 border border-forest-800 rounded-lg space-y-1.5">
+          <div className="p-3 bg-forest-900/70 border border-forest-800 rounded-lg space-y-1">
             <div className="flex items-center space-x-1.5 text-[11px] font-bold text-emerald-300">
               <Sparkles className="w-3.5 h-3.5 text-emerald-400" />
-              <span>Vercel AI & Cloud</span>
+              <span>Assistente Inteligente</span>
             </div>
             <p className="text-[10px] text-slate-400 leading-relaxed">
-              PostgreSQL RLS ativo com parecer técnico automatizado via AI Gateway.
+              Análises automáticas de fornecedores e recomendações de compras.
             </p>
           </div>
         </div>
@@ -215,7 +214,7 @@ export function AppSidebar() {
                 {userEmail}
               </p>
               <p className="text-[10px] text-slate-400 font-mono">
-                Engenharia
+                Conta Ativa
               </p>
             </div>
           </div>

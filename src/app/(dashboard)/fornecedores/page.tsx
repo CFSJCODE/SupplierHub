@@ -128,7 +128,7 @@ export default function FornecedoresPage() {
   return (
     <AppShell
       title="Catálogo de Fornecedores"
-      subtitle="Gerenciamento de contatos, categorias técnicas e parâmetros de compras"
+      subtitle="Gerenciamento de contatos, categorias e informações de compras"
       headerAction={
         <div className="flex items-center space-x-2">
           {filteredSuppliers.length > 0 && (

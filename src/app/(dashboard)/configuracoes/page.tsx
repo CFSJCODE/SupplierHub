@@ -15,17 +15,15 @@ import {
   Server,
   UserCheck,
   CheckCircle2,
-  AlertTriangle,
-  Code2,
-  Layers,
-  Cpu,
   FileSpreadsheet,
   FileCode,
+  Lock,
+  Cloud,
 } from "lucide-react";
 import { toast } from "sonner";
 
 export default function ConfiguracoesPage() {
-  const [userEmail, setUserEmail] = useState<string | null>("engenharia@local");
+  const [userEmail, setUserEmail] = useState<string | null>("compras@empresa.com");
   const [totalCount, setTotalCount] = useState<number>(0);
   const [seeding, setSeeding] = useState(false);
   const [exporting, setExporting] = useState(false);
@@ -48,7 +46,7 @@ export default function ConfiguracoesPage() {
     try {
       setSeeding(true);
       const count = await supplierService.seedDemoSuppliers();
-      toast.success(`${count} fornecedores de referência adicionados com sucesso!`);
+      toast.success(`${count} fornecedores de exemplo adicionados com sucesso!`);
       const updated = await supplierService.getSuppliers();
       setTotalCount(updated.length);
     } catch (err: unknown) {
@@ -88,50 +86,50 @@ export default function ConfiguracoesPage() {
   return (
     <AppShell
       title="Configurações do Sistema"
-      subtitle="Diagnóstico de conectividade, gerenciamento de dados e portabilidade"
+      subtitle="Status da conta, gerenciamento de dados e exportação de relatórios"
     >
       <div className="max-w-4xl mx-auto space-y-6">
-        {/* Painel de Status e Conectividade */}
+        {/* Painel de Status da Conta e Conexão */}
         <section className="bg-white border border-slate-200 rounded-xl p-6 shadow-card space-y-4">
           <div className="flex items-center space-x-2 border-b border-slate-100 pb-3.5">
             <Server className="w-4 h-4 text-emerald-600 shrink-0" />
             <h2 className="text-sm font-bold text-slate-900 tracking-tight">
-              Diagnóstico de Banco de Dados & Autenticação
+              Status da Conta & Conexão
             </h2>
           </div>
 
           <div className="grid grid-cols-1 sm:grid-cols-2 gap-4 text-xs">
             <div className="p-4 bg-slate-50 border border-slate-200 rounded-xl space-y-2">
               <span className="text-[10px] font-semibold uppercase tracking-wider text-slate-500 font-mono block">
-                Conexão Supabase
+                Armazenamento de Dados
               </span>
               <div className="flex items-center space-x-2">
                 {isConnected ? (
                   <>
                     <CheckCircle2 className="w-4 h-4 text-emerald-600 shrink-0" />
                     <span className="font-bold text-slate-900">
-                      Conectado ao Supabase (PostgreSQL + RLS)
+                      Sincronização em Nuvem Ativa
                     </span>
                   </>
                 ) : (
                   <>
                     <div className="w-2.5 h-2.5 rounded-full bg-amber-500 shrink-0" />
                     <span className="font-bold text-slate-900">
-                      Modo Demonstração / LocalStorage
+                      Modo Demonstração
                     </span>
                   </>
                 )}
               </div>
               <p className="text-xs text-slate-600 leading-relaxed">
                 {isConnected
-                  ? "As operações de CRUD e autenticação estão sendo persistidas diretamente nas tabelas seguras do Supabase na região sa-east-1."
-                  : "Para conectar ao seu projeto Supabase de produção, configure as variáveis NEXT_PUBLIC_SUPABASE_URL e NEXT_PUBLIC_SUPABASE_ANON_KEY no arquivo .env.local ou na Vercel."}
+                  ? "Suas alterações e cadastros são sincronizados automaticamente e protegidos em ambiente seguro."
+                  : "Ambiente de demonstração ativo para testes locais de navegação."}
               </p>
             </div>
 
             <div className="p-4 bg-slate-50 border border-slate-200 rounded-xl space-y-2">
               <span className="text-[10px] font-semibold uppercase tracking-wider text-slate-500 font-mono block">
-                Usuário Autenticado
+                Usuário Conectado
               </span>
               <div className="flex items-center space-x-2">
                 <UserCheck className="w-4 h-4 text-emerald-600 shrink-0" />
@@ -140,7 +138,7 @@ export default function ConfiguracoesPage() {
                 </span>
               </div>
               <p className="text-xs text-slate-600 leading-relaxed">
-                Total de fornecedores vinculados: <strong className="text-slate-900">{totalCount}</strong>
+                Total de fornecedores vinculados à sua conta: <strong className="text-slate-900">{totalCount}</strong>
               </p>
             </div>
           </div>
@@ -151,12 +149,12 @@ export default function ConfiguracoesPage() {
           <div className="flex items-center space-x-2 border-b border-slate-100 pb-3.5">
             <Database className="w-4 h-4 text-emerald-600 shrink-0" />
             <h2 className="text-sm font-bold text-slate-900 tracking-tight">
-              Portabilidade & Exportação de Dados
+              Exportação e Relatórios
             </h2>
           </div>
 
           <p className="text-xs text-slate-600 leading-relaxed">
-            Seus dados pertencem a você. Exporte a listagem completa de fornecedores para planilhas ou realize um backup estruturado em formato JSON.
+            Exporte sua lista de fornecedores para planilhas do Excel ou faça o download de uma cópia de segurança em formato estruturado.
           </p>
 
           <div className="flex flex-wrap items-center gap-3 pt-1">
@@ -176,22 +174,22 @@ export default function ConfiguracoesPage() {
               isLoading={exporting}
               leftIcon={<FileCode className="w-3.5 h-3.5 text-slate-600" />}
             >
-              Exportar Backup Estruturado (JSON)
+              Exportar Cópia de Segurança (JSON)
             </Button>
           </div>
         </section>
 
-        {/* Ferramentas de Demonstração e Seed */}
+        {/* Dados de Exemplo */}
         <section className="bg-white border border-slate-200 rounded-xl p-6 shadow-card space-y-4">
           <div className="flex items-center space-x-2 border-b border-slate-100 pb-3.5">
             <Sparkles className="w-4 h-4 text-emerald-600 shrink-0" />
             <h2 className="text-sm font-bold text-slate-900 tracking-tight">
-              Dados de Demonstração & Referência
+              Dados de Exemplo
             </h2>
           </div>
 
           <p className="text-xs text-slate-600 leading-relaxed">
-            Carregue automaticamente os dados dos fornecedores de engenharia de referência (UsinaInfo, RoboCore, MakerHero, Mouser, DigiKey, AliExpress) com dados completos de contato, avaliação e observações técnicas de compras.
+            Adicione uma lista com dados de exemplo de fornecedores (contatos, avaliações e histórico) para testar os filtros, relatórios e recursos do sistema.
           </p>
 
           <div className="pt-1">
@@ -207,31 +205,31 @@ export default function ConfiguracoesPage() {
           </div>
         </section>
 
-        {/* Arquitetura & Segurança */}
+        {/* Segurança e Privacidade */}
         <section className="bg-white border border-slate-200 rounded-xl p-6 shadow-card space-y-3">
           <div className="flex items-center space-x-2 border-b border-slate-100 pb-3.5">
             <ShieldCheck className="w-4 h-4 text-emerald-600 shrink-0" />
             <h2 className="text-sm font-bold text-slate-900 tracking-tight">
-              Arquitetura & Conformidade Técnica
+              Segurança & Recursos da Plataforma
             </h2>
           </div>
 
           <div className="grid grid-cols-2 sm:grid-cols-4 gap-3 text-xs font-mono pt-1">
             <div className="p-3 bg-slate-50 rounded-lg border border-slate-200">
-              <span className="text-[10px] text-slate-500 block">Frontend</span>
-              <strong className="text-slate-900">Next.js 15 App Router</strong>
+              <span className="text-[10px] text-slate-500 block">Privacidade</span>
+              <strong className="text-slate-900">Acesso Restrito</strong>
             </div>
             <div className="p-3 bg-slate-50 rounded-lg border border-slate-200">
-              <span className="text-[10px] text-slate-500 block">Database</span>
-              <strong className="text-slate-900">PostgreSQL (Supabase)</strong>
+              <span className="text-[10px] text-slate-500 block">Backup</span>
+              <strong className="text-slate-900">Exportação CSV / JSON</strong>
             </div>
             <div className="p-3 bg-slate-50 rounded-lg border border-slate-200">
-              <span className="text-[10px] text-slate-500 block">Segurança</span>
-              <strong className="text-slate-900">Row Level Security</strong>
+              <span className="text-[10px] text-slate-500 block">Conexão</span>
+              <strong className="text-slate-900">Criptografia SSL</strong>
             </div>
             <div className="p-3 bg-slate-50 rounded-lg border border-slate-200">
-              <span className="text-[10px] text-slate-500 block">IA Engine</span>
-              <strong className="text-slate-900">Vercel AI Gateway</strong>
+              <span className="text-[10px] text-slate-500 block">Assistente</span>
+              <strong className="text-slate-900">Inteligência Artificial</strong>
             </div>
           </div>
         </section>

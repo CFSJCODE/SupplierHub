@@ -20,15 +20,12 @@ import {
   Phone,
   MessageSquare,
   MapPin,
-  CheckCircle2,
-  AlertCircle,
   Clock,
   ThumbsUp,
   AlertTriangle,
   History,
   ShieldCheck,
   Calendar,
-  Key,
   FileText,
   Sparkles,
 } from "lucide-react";
@@ -125,7 +122,7 @@ export function SupplierDetailView({
               onClick={() => setShowAIModal(true)}
               leftIcon={<Sparkles className="w-3.5 h-3.5 text-emerald-600" />}
             >
-              Parecer IA
+              Análise com IA
             </Button>
             {supplier.website && (
               <a
@@ -177,7 +174,7 @@ export function SupplierDetailView({
           <div className="flex items-center space-x-2 border-b border-slate-100 pb-3.5">
             <Globe className="w-4 h-4 text-emerald-600 shrink-0" />
             <h2 className="text-sm font-bold text-slate-900 tracking-tight">
-              Canais de Contato & Vendas
+              Canais de Contato
             </h2>
           </div>
 
@@ -263,18 +260,18 @@ export function SupplierDetailView({
           <div className="flex items-center space-x-2 border-b border-slate-100 pb-3.5">
             <MapPin className="w-4 h-4 text-emerald-600 shrink-0" />
             <h2 className="text-sm font-bold text-slate-900 tracking-tight">
-              Localização & Despacho
+              Localização e Endereço
             </h2>
           </div>
 
           <div className="space-y-3 text-xs">
             <div className="flex items-start justify-between py-2 border-b border-slate-100">
-              <span className="text-slate-500 font-medium">País de Origem</span>
+              <span className="text-slate-500 font-medium">País</span>
               <span className="font-semibold text-slate-900">{supplier.country || "Brasil"}</span>
             </div>
 
             <div className="flex items-start justify-between py-2 border-b border-slate-100">
-              <span className="text-slate-500 font-medium">Estado / Província</span>
+              <span className="text-slate-500 font-medium">Estado</span>
               <span className="font-medium text-slate-900">{supplier.state || "-"}</span>
             </div>
 
@@ -286,7 +283,7 @@ export function SupplierDetailView({
             <div className="py-2">
               <span className="text-slate-500 font-medium block mb-1">Endereço Completo</span>
               <p className="text-slate-800 leading-relaxed font-mono text-[11px] bg-slate-50 p-2.5 rounded-lg border border-slate-200">
-                {supplier.address || "Endereço detalhado não informado."}
+                {supplier.address || "Endereço não informado."}
               </p>
               {mapsUrl && (
                 <a
@@ -295,7 +292,7 @@ export function SupplierDetailView({
                   rel="noopener noreferrer"
                   className="mt-2.5 inline-flex items-center gap-1.5 text-xs text-emerald-700 hover:underline font-semibold"
                 >
-                  <span>Ver localização no Google Maps</span>
+                  <span>Ver no Google Maps</span>
                   <ExternalLink className="w-3.5 h-3.5" />
                 </a>
               )}
@@ -304,12 +301,12 @@ export function SupplierDetailView({
         </div>
       </div>
 
-      {/* Procurement & Engineering Technical Evaluation Panel */}
+      {/* Avaliação e Observações Comerciais */}
       <div className="bg-white border border-slate-200 rounded-xl p-6 shadow-card space-y-4">
         <div className="flex items-center space-x-2 border-b border-slate-100 pb-3.5">
           <ShieldCheck className="w-4 h-4 text-emerald-600 shrink-0" />
           <h2 className="text-sm font-bold text-slate-900 tracking-tight">
-            Avaliação Técnica de Procurement & Engenharia
+            Avaliação de Atendimento e Qualidade
           </h2>
         </div>
 
@@ -318,10 +315,10 @@ export function SupplierDetailView({
           <div className="bg-emerald-50/70 border border-emerald-200/80 rounded-xl p-4.5 space-y-2">
             <div className="flex items-center space-x-2 text-emerald-950 font-bold text-xs">
               <ThumbsUp className="w-4 h-4 text-emerald-700" />
-              <span>Vantagens & Pontos Fortes</span>
+              <span>Pontos Fortes & Vantagens</span>
             </div>
             <p className="text-xs text-slate-800 leading-relaxed">
-              {supplier.advantages || "Nenhuma vantagem específica registrada."}
+              {supplier.advantages || "Nenhum ponto forte registrado."}
             </p>
           </div>
 
@@ -329,10 +326,10 @@ export function SupplierDetailView({
           <div className="bg-amber-50/70 border border-amber-200/80 rounded-xl p-4.5 space-y-2">
             <div className="flex items-center space-x-2 text-amber-950 font-bold text-xs">
               <AlertTriangle className="w-4 h-4 text-amber-700" />
-              <span>Limitações & Pontos de Atenção</span>
+              <span>Pontos de Atenção</span>
             </div>
             <p className="text-xs text-slate-800 leading-relaxed">
-              {supplier.limitations || "Nenhuma limitação específica registrada."}
+              {supplier.limitations || "Nenhum ponto de atenção registrado."}
             </p>
           </div>
 
@@ -340,10 +337,10 @@ export function SupplierDetailView({
           <div className="col-span-full bg-slate-50 border border-slate-200 rounded-xl p-4.5 space-y-2">
             <div className="flex items-center space-x-2 text-slate-900 font-bold text-xs">
               <History className="w-4 h-4 text-slate-600" />
-              <span>Histórico & Experiência de Compra</span>
+              <span>Histórico & Experiência de Pedidos</span>
             </div>
             <p className="text-xs text-slate-700 leading-relaxed">
-              {supplier.purchase_experience || "Nenhum histórico detalhado de compras registrado até o momento."}
+              {supplier.purchase_experience || "Nenhum histórico detalhado registrado até o momento."}
             </p>
           </div>
 
@@ -362,22 +359,16 @@ export function SupplierDetailView({
         </div>
       </div>
 
-      {/* Auditoria & Metadados do Registro */}
+      {/* Metadados do Registro */}
       <div className="bg-slate-100/70 border border-slate-200 rounded-xl p-4 text-[11px] font-mono text-slate-600 flex flex-wrap items-center justify-between gap-3">
-        <div className="flex items-center space-x-2">
-          <Key className="w-3.5 h-3.5 text-slate-400" />
-          <span>UUID: <strong className="text-slate-800">{supplier.id}</strong></span>
-        </div>
-        <div className="flex flex-wrap items-center gap-4">
-          <span className="flex items-center gap-1.5">
-            <Calendar className="w-3.5 h-3.5 text-slate-400" />
-            Cadastrado em: <strong className="text-slate-800">{formatDateTime(supplier.created_at)}</strong>
-          </span>
-          <span className="flex items-center gap-1.5">
-            <Clock className="w-3.5 h-3.5 text-slate-400" />
-            Última atualização: <strong className="text-slate-800">{formatDateTime(supplier.updated_at)}</strong>
-          </span>
-        </div>
+        <span className="flex items-center gap-1.5">
+          <Calendar className="w-3.5 h-3.5 text-slate-400" />
+          Cadastrado em: <strong className="text-slate-800">{formatDateTime(supplier.created_at)}</strong>
+        </span>
+        <span className="flex items-center gap-1.5">
+          <Clock className="w-3.5 h-3.5 text-slate-400" />
+          Última atualização: <strong className="text-slate-800">{formatDateTime(supplier.updated_at)}</strong>
+        </span>
       </div>
 
       {/* Modal de Análise de IA */}

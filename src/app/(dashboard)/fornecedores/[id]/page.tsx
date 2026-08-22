@@ -76,7 +76,7 @@ export default function FornecedorDetailPage({ params }: PageProps) {
   return (
     <AppShell
       title={supplier ? supplier.name : "Detalhes do Fornecedor"}
-      subtitle={supplier ? `Categoria: ${supplier.category} • Status: ${supplier.status}` : "Dossiê técnico"}
+      subtitle={supplier ? `Categoria: ${supplier.category} • Status: ${supplier.status}` : "Informações do fornecedor"}
       showBack
       backHref="/fornecedores"
     >

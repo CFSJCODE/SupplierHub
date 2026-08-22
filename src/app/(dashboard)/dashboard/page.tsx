@@ -21,9 +21,7 @@ import {
   PlusCircle,
   ArrowRight,
   Sparkles,
-  ExternalLink,
   Building,
-  TrendingUp,
   Award,
   Zap,
 } from "lucide-react";
@@ -45,8 +43,8 @@ export default function DashboardPage() {
       setRecentSuppliers(data.recentSuppliers);
       setCategoryCounts(data.categoryCounts);
     } catch (err: unknown) {
-      console.error("Erro ao carregar dados do dashboard:", err);
-      toast.error("Erro ao carregar métricas do dashboard.");
+      console.error("Erro ao carregar dados do painel:", err);
+      toast.error("Erro ao carregar métricas do painel.");
     } finally {
       setLoading(false);
     }
@@ -75,7 +73,7 @@ export default function DashboardPage() {
   return (
     <AppShell
       title="Painel de Controle"
-      subtitle="Visão consolidada da cadeia de suprimentos e fornecedores técnicos"
+      subtitle="Visão consolidada da rede de parceiros e fornecedores"
     >
       <div className="space-y-6">
         {/* Bloco de Métricas Principais */}
@@ -88,7 +86,7 @@ export default function DashboardPage() {
               <div className="absolute top-0 left-0 right-0 h-1 bg-slate-900" />
               <div className="flex items-center justify-between">
                 <span className="text-[11px] font-semibold uppercase tracking-wider text-slate-500 font-mono">
-                  Total Cadastrado
+                  Total de Fornecedores
                 </span>
                 <div className="w-8 h-8 rounded-lg bg-slate-100 border border-slate-200 flex items-center justify-center text-slate-700 shadow-2xs group-hover:scale-105 transition-transform">
                   <Building2 className="w-4 h-4" />
@@ -99,7 +97,7 @@ export default function DashboardPage() {
                   {stats?.total || 0}
                 </span>
                 <p className="text-xs text-slate-500 mt-1 flex items-center gap-1">
-                  <span>Parceiros mapeados</span>
+                  <span>Empresas cadastradas</span>
                 </p>
               </div>
             </div>
@@ -130,7 +128,7 @@ export default function DashboardPage() {
               <div className="absolute top-0 left-0 right-0 h-1 bg-amber-500" />
               <div className="flex items-center justify-between">
                 <span className="text-[11px] font-semibold uppercase tracking-wider text-slate-500 font-mono">
-                  Favoritos de Compra
+                  Fornecedores Favoritos
                 </span>
                 <div className="w-8 h-8 rounded-lg bg-amber-50 border border-amber-200 flex items-center justify-center text-amber-600 shadow-2xs group-hover:scale-105 transition-transform">
                   <Star className="w-4 h-4 fill-amber-500 text-amber-500" />
@@ -151,7 +149,7 @@ export default function DashboardPage() {
               <div className="absolute top-0 left-0 right-0 h-1 bg-blue-600" />
               <div className="flex items-center justify-between">
                 <span className="text-[11px] font-semibold uppercase tracking-wider text-slate-500 font-mono">
-                  Segmentos Cobertos
+                  Categorias Mapeadas
                 </span>
                 <div className="w-8 h-8 rounded-lg bg-blue-50 border border-blue-200 flex items-center justify-center text-blue-700 shadow-2xs group-hover:scale-105 transition-transform">
                   <Layers className="w-4 h-4" />
@@ -162,19 +160,19 @@ export default function DashboardPage() {
                   {stats?.categoriesCount || 0}
                 </span>
                 <p className="text-xs text-slate-500 mt-1">
-                  Especialidades técnicas
+                  Segmentos com fornecedores ativos
                 </p>
               </div>
             </div>
           </div>
         )}
 
-        {/* Bloco de Acesso Rápido com Efeito Visual Refinado */}
+        {/* Bloco de Acesso Rápido */}
         <div className="bg-white border border-slate-200 rounded-xl p-6 shadow-card space-y-4">
           <div className="flex items-center justify-between border-b border-slate-100 pb-3.5">
             <h2 className="text-xs font-bold uppercase tracking-wider text-slate-900 font-mono flex items-center gap-2">
               <Zap className="w-4 h-4 text-emerald-600" />
-              <span>Ações Operacionais de Engenharia</span>
+              <span>Ações Rápidas</span>
             </h2>
           </div>
 
@@ -191,7 +189,7 @@ export default function DashboardPage() {
                   Novo Fornecedor
                 </span>
                 <span className="text-[11px] text-slate-500 block mt-0.5">
-                  Cadastrar catálogo, contatos e lead times
+                  Cadastrar catálogo, contatos e endereço
                 </span>
               </div>
             </Link>
@@ -205,7 +203,7 @@ export default function DashboardPage() {
               </div>
               <div>
                 <span className="text-xs font-bold text-slate-900 block leading-tight group-hover:text-emerald-700 transition-colors">
-                  Catálogo Geral
+                  Catálogo de Fornecedores
                 </span>
                 <span className="text-[11px] text-slate-500 block mt-0.5">
                   Pesquisar, filtrar e exportar dados
@@ -225,7 +223,7 @@ export default function DashboardPage() {
                   Fornecedores Favoritos
                 </span>
                 <span className="text-[11px] text-slate-500 block mt-0.5">
-                  Acesso imediato para compras críticas
+                  Acesso imediato para compras frequentes
                 </span>
               </div>
             </Link>
@@ -243,7 +241,7 @@ export default function DashboardPage() {
                   <span>Fornecedores Adicionados Recentemente</span>
                 </h2>
                 <p className="text-[11px] text-slate-500 mt-0.5">
-                  Últimos parceiros catalogados e ativos no sistema
+                  Últimas empresas cadastradas no sistema
                 </p>
               </div>
               <Link
@@ -260,10 +258,10 @@ export default function DashboardPage() {
             ) : recentSuppliers.length === 0 ? (
               <EmptyState
                 title="Nenhum fornecedor cadastrado"
-                description="Cadastre seu primeiro fornecedor para começar a organizar sua rede de compras e parceiros de engenharia."
+                description="Cadastre seu primeiro fornecedor para começar a organizar sua rede de compras e contatos comerciais."
                 actionLabel="Cadastrar fornecedor"
                 actionHref="/fornecedores/novo"
-                secondaryActionLabel="Carregar Exemplos (UsinaInfo, RoboCore, MakerHero)"
+                secondaryActionLabel="Carregar Exemplos"
                 onSecondaryAction={handleSeedDemo}
               />
             ) : (
@@ -312,7 +310,7 @@ export default function DashboardPage() {
                         type="button"
                         onClick={() => setAiModalSupplier(supplier)}
                         className="p-1.5 text-slate-400 hover:text-emerald-700 hover:bg-emerald-50 rounded-lg transition-colors cursor-pointer"
-                        title="Gerar parecer de IA"
+                        title="Análise com IA"
                       >
                         <Sparkles className="w-3.5 h-3.5 text-emerald-600" />
                       </button>
@@ -331,16 +329,16 @@ export default function DashboardPage() {
             )}
           </div>
 
-          {/* Seção: Distribuição por Segmento Técnico (1 coluna) */}
+          {/* Seção: Distribuição por Categoria (1 coluna) */}
           <div className="bg-white border border-slate-200 rounded-xl p-6 shadow-card space-y-4 flex flex-col justify-between">
             <div>
               <div className="border-b border-slate-100 pb-3.5">
                 <h2 className="text-sm font-bold text-slate-900 tracking-tight flex items-center gap-2">
                   <Layers className="w-4 h-4 text-emerald-600" />
-                  <span>Segmentos Técnicos</span>
+                  <span>Distribuição por Categoria</span>
                 </h2>
                 <p className="text-[11px] text-slate-500 mt-0.5">
-                  Distribuição e concentração de catálogo
+                  Proporção de fornecedores cadastrados
                 </p>
               </div>
 
@@ -381,15 +379,15 @@ export default function DashboardPage() {
               </div>
             </div>
 
-            {/* Seed Quick Trigger Card */}
+            {/* Seed Card */}
             {stats && stats.total === 0 && (
               <div className="p-4 bg-emerald-50 border border-emerald-200 rounded-xl mt-4 space-y-2 shadow-xs">
                 <div className="flex items-center space-x-1.5 text-xs font-bold text-emerald-950">
                   <Sparkles className="w-4 h-4 text-emerald-700" />
-                  <span>Ambiente inicial detectado</span>
+                  <span>Deseja começar com exemplos?</span>
                 </div>
                 <p className="text-[11px] text-emerald-900 leading-relaxed">
-                  Deseja carregar os fornecedores de referência recomendados (MakerHero, UsinaInfo, RoboCore, Mouser, DigiKey)?
+                  Carregue uma lista inicial com dados de exemplo de fornecedores para explorar o sistema.
                 </p>
                 <Button
                   size="sm"

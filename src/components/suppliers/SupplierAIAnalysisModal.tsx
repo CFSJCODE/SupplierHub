@@ -45,10 +45,10 @@ export function SupplierAIAnalysisModal({
 
       if (!res.ok) {
         const errorData = await res.json().catch(() => ({}));
-        throw new Error(errorData.error || "Erro ao conectar com o AI Gateway.");
+        throw new Error(errorData.error || "Erro ao conectar com o serviço de inteligência artificial.");
       }
 
-      if (!res.body) throw new Error("Resposta vazia da IA.");
+      if (!res.body) throw new Error("Resposta vazia.");
 
       const reader = res.body.getReader();
       const decoder = new TextDecoder();
@@ -61,7 +61,7 @@ export function SupplierAIAnalysisModal({
         setAnalysisText(result);
       }
     } catch (err: unknown) {
-      const msg = err instanceof Error ? err.message : "Erro ao gerar análise com IA.";
+      const msg = err instanceof Error ? err.message : "Erro ao gerar análise com inteligência artificial.";
       setHasError(msg);
     } finally {
       setIsLoading(false);
@@ -72,7 +72,7 @@ export function SupplierAIAnalysisModal({
     if (!analysisText) return;
     navigator.clipboard.writeText(analysisText);
     setCopied(true);
-    toast.success("Parecer copiado para a área de transferência.");
+    toast.success("Análise copiada para a área de transferência.");
     setTimeout(() => setCopied(false), 2000);
   };
 
@@ -80,8 +80,8 @@ export function SupplierAIAnalysisModal({
     <Modal
       isOpen={isOpen}
       onClose={onClose}
-      title={`Parecer Técnico de IA: ${supplier.name}`}
-      description="Análise automatizada de risco de fornecimento, lead time e recomendações de compras."
+      title={`Análise Inteligente: ${supplier.name}`}
+      description="Resumo comercial automático com análise de prazos, atendimento e sugestões de compras."
       maxWidth="lg"
     >
       <div className="space-y-4">
@@ -91,14 +91,14 @@ export function SupplierAIAnalysisModal({
               <Sparkles className="w-5 h-5" />
             </div>
             <p className="text-xs text-slate-600 max-w-sm mx-auto leading-relaxed">
-              O Vercel AI Gateway analisará os dados cadastrados, segmento técnico ({supplier.category}) e localização para emitir um relatório de compras para engenharia.
+              O assistente analisará as informações cadastradas de {supplier.name} na categoria {supplier.category} e localização para emitir um parecer resumido e dicas de negociação.
             </p>
             <Button
               size="sm"
               onClick={handleGenerateAnalysis}
               leftIcon={<Sparkles className="w-3.5 h-3.5" />}
             >
-              Iniciar Análise de IA
+              Iniciar Análise com IA
             </Button>
           </div>
         )}
@@ -109,7 +109,7 @@ export function SupplierAIAnalysisModal({
               <Bot className="w-5 h-5 text-emerald-700" />
             </div>
             <p className="text-xs font-mono font-medium text-slate-900 animate-pulse">
-              Consultando Vercel AI Gateway...
+              Gerando análise inteligente...
             </p>
             {analysisText && (
               <div className="text-left text-xs text-slate-900 whitespace-pre-wrap font-sans bg-white p-4 rounded-lg border border-slate-200 max-h-60 overflow-y-auto shadow-xs">
@@ -123,7 +123,7 @@ export function SupplierAIAnalysisModal({
           <div className="p-4 bg-rose-50 border border-rose-200 rounded-xl space-y-2 text-xs text-rose-800">
             <div className="flex items-center space-x-1.5 font-bold">
               <AlertCircle className="w-4 h-4 text-rose-600 shrink-0" />
-              <span>Aviso do AI Gateway</span>
+              <span>Aviso do Assistente</span>
             </div>
             <p className="leading-relaxed">{hasError}</p>
             <Button
@@ -145,7 +145,7 @@ export function SupplierAIAnalysisModal({
 
             <div className="flex items-center justify-between pt-2">
               <span className="text-[11px] font-mono text-slate-500">
-                Gerado via Vercel AI SDK & AI Gateway
+                Gerado por Inteligência Artificial
               </span>
               <div className="flex items-center space-x-2">
                 <Button
