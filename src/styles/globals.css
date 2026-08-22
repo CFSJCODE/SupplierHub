@@ -1,0 +1,55 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+:root {
+  --color-black-forest: #283618;
+  --color-olive-leaf: #606C38;
+  --color-sunlit-clay: #DDA15E;
+  --color-cornsilk: #FEFAE0;
+  --color-copperwood: #BC6C25;
+
+  --color-background: #FEFAE0;
+  --color-surface: #FFFFFF;
+  --color-surface-subtle: #FAF7EE;
+  --color-surface-muted: #F3EED8;
+  --color-border: #E5DFC5;
+  --color-border-subtle: #EFEBD9;
+
+  --color-text-primary: #18220F;
+  --color-text-secondary: #475029;
+  --color-text-muted: #6B7258;
+}
+
+body {
+  background-color: var(--color-background);
+  color: var(--color-text-primary);
+  font-feature-settings: "cv02", "cv03", "cv04", "cv11";
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+}
+
+/* Custom Scrollbar for technical tables */
+::-webkit-scrollbar {
+  width: 6px;
+  height: 6px;
+}
+
+::-webkit-scrollbar-track {
+  background: #f4f0db;
+}
+
+::-webkit-scrollbar-thumb {
+  background: #cfc8ab;
+  border-radius: 3px;
+}
+
+::-webkit-scrollbar-thumb:hover {
+  background: #606C38;
+}
+
+/* Focus styling for WCAG compliance */
+:focus-visible {
+  outline: 2px solid #BC6C25;
+  outline-offset: 2px;
+}
