@@ -16,6 +16,7 @@ import {
   Building,
   Phone,
   MessageSquare,
+  ArrowRight,
 } from "lucide-react";
 import { cn } from "@/lib/utils/cn";
 
@@ -36,17 +37,17 @@ export function SupplierCard({
     .join(", ");
 
   return (
-    <div className="bg-white border border-[#D2CAA9] rounded-lg p-4 shadow-subtle flex flex-col justify-between space-y-3 hover:border-brand-olive transition-colors">
+    <div className="interactive-card bg-white border border-[#D2CAA9] rounded-xl p-4 sm:p-5 shadow-subtle flex flex-col justify-between space-y-3.5 group">
       {/* Top Header: Logo + Name + Favorite */}
       <div className="flex items-start justify-between gap-2.5">
         <div className="flex items-start space-x-3 min-w-0">
-          <div className="w-10 h-10 rounded-md bg-[#FAF7EE] border border-[#E5DFC5] flex items-center justify-center shrink-0 overflow-hidden">
+          <div className="w-11 h-11 rounded-lg bg-[#FAF7EE] border border-[#E5DFC5] flex items-center justify-center shrink-0 overflow-hidden shadow-sm">
             {supplier.logo_url ? (
               // eslint-disable-next-line @next/next/no-img-element
               <img
                 src={supplier.logo_url}
                 alt={supplier.name}
-                className="w-full h-full object-contain p-0.5"
+                className="w-full h-full object-contain p-1"
                 onError={(e) => {
                   (e.target as HTMLElement).style.display = "none";
                 }}
@@ -58,7 +59,7 @@ export function SupplierCard({
           <div className="min-w-0">
             <Link
               href={`/fornecedores/${supplier.id}`}
-              className="text-sm font-bold text-forest-900 hover:text-brand-copper leading-snug block truncate"
+              className="text-sm font-bold text-forest-900 group-hover:text-brand-copper leading-snug block truncate transition-colors"
             >
               {supplier.name}
             </Link>
@@ -82,7 +83,7 @@ export function SupplierCard({
               "w-5 h-5",
               supplier.favorite
                 ? "text-brand-copper fill-brand-copper"
-                : "text-[#D2CAA9] fill-transparent"
+                : "text-[#D2CAA9] hover:text-brand-clay fill-transparent"
             )}
           />
         </button>
@@ -107,7 +108,7 @@ export function SupplierCard({
       )}
 
       {/* Location & Website meta */}
-      <div className="pt-2 border-t border-[#F0EBD7] text-xs space-y-1.5 text-olive-800/90 font-medium">
+      <div className="pt-2.5 border-t border-[#F0EBD7] text-xs space-y-1.5 text-olive-800/90 font-medium">
         {hasLocation && (
           <div className="flex items-center gap-1.5 text-[11px] truncate">
             <MapPin className="w-3.5 h-3.5 text-clay-600 shrink-0" />
@@ -130,12 +131,12 @@ export function SupplierCard({
       </div>
 
       {/* Card Action Footer */}
-      <div className="pt-2 border-t border-[#F0EBD7] flex items-center justify-between gap-2">
+      <div className="pt-2.5 border-t border-[#F0EBD7] flex items-center justify-between gap-2">
         <div className="flex items-center space-x-1">
           {supplier.phone && (
             <a
               href={`tel:${supplier.phone.replace(/\D/g, "")}`}
-              className="p-1.5 bg-[#FAF7EE] text-forest-800 hover:text-brand-olive rounded border border-[#E5DFC5]"
+              className="p-1.5 bg-[#FAF7EE] text-forest-800 hover:text-brand-olive rounded-md border border-[#E5DFC5] shadow-xs transition-colors"
               title="Ligar"
             >
               <Phone className="w-3.5 h-3.5" />
@@ -146,7 +147,7 @@ export function SupplierCard({
               href={`https://wa.me/${supplier.whatsapp.replace(/\D/g, "")}`}
               target="_blank"
               rel="noopener noreferrer"
-              className="p-1.5 bg-emerald-50 text-emerald-800 hover:bg-emerald-100 rounded border border-emerald-200"
+              className="p-1.5 bg-emerald-50 text-emerald-800 hover:bg-emerald-100 rounded-md border border-emerald-200 shadow-xs transition-colors"
               title="Abrir WhatsApp"
             >
               <MessageSquare className="w-3.5 h-3.5" />
@@ -157,13 +158,14 @@ export function SupplierCard({
         <div className="flex items-center space-x-1.5">
           <Link
             href={`/fornecedores/${supplier.id}`}
-            className="px-2.5 py-1 text-xs font-semibold text-forest-800 bg-[#FAF7EE] hover:bg-[#F3EED8] border border-[#D2CAA9] rounded-md transition-colors"
+            className="px-3 py-1 text-xs font-semibold text-forest-900 bg-[#FAF7EE] hover:bg-[#F3EED8] border border-[#D2CAA9] rounded-md transition-colors shadow-xs flex items-center gap-1"
           >
-            Detalhes
+            <span>Ver</span>
+            <ArrowRight className="w-3 h-3 text-forest-700/60" />
           </Link>
           <Link
             href={`/fornecedores/${supplier.id}/editar`}
-            className="p-1.5 text-forest-800 hover:text-brand-olive hover:bg-[#FAF7EE] rounded border border-transparent transition-colors"
+            className="p-1.5 text-forest-800 hover:text-brand-olive hover:bg-[#FAF7EE] rounded-md border border-transparent transition-colors"
             title="Editar"
           >
             <Edit2 className="w-3.5 h-3.5" />
@@ -171,7 +173,7 @@ export function SupplierCard({
           <button
             type="button"
             onClick={() => onDelete(supplier)}
-            className="p-1.5 text-forest-800 hover:text-rose-700 hover:bg-rose-50 rounded border border-transparent transition-colors"
+            className="p-1.5 text-forest-800 hover:text-rose-700 hover:bg-rose-50 rounded-md border border-transparent transition-colors"
             title="Excluir"
           >
             <Trash2 className="w-3.5 h-3.5" />

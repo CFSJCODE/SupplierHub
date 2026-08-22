@@ -19,6 +19,9 @@
   --color-text-primary: #18220F;
   --color-text-secondary: #475029;
   --color-text-muted: #6B7258;
+
+  --ease-out-quad: cubic-bezier(0.25, 1, 0.5, 1);
+  --ease-spring: cubic-bezier(0.175, 0.885, 0.32, 1.15);
 }
 
 body {
@@ -27,6 +30,48 @@ body {
   font-feature-settings: "cv02", "cv03", "cv04", "cv11";
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
+}
+
+/* Tactile micro-interactions (Emil Kowalski Design Engineering) */
+button,
+a[role="button"],
+.btn-press {
+  transition: transform 150ms var(--ease-out-quad), background-color 150ms ease, border-color 150ms ease, box-shadow 150ms ease;
+}
+
+button:active:not(:disabled),
+a[role="button"]:active,
+.btn-press:active {
+  transform: scale(0.975);
+}
+
+/* Subtle Grid Background for engineering feel */
+.bg-engineering-grid {
+  background-size: 24px 24px;
+  background-image: 
+    linear-gradient(to right, rgba(96, 108, 56, 0.05) 1px, transparent 1px),
+    linear-gradient(to bottom, rgba(96, 108, 56, 0.05) 1px, transparent 1px);
+}
+
+/* Glassmorphic elevation */
+.glass-panel {
+  background: rgba(255, 255, 255, 0.85);
+  backdrop-filter: blur(12px);
+  -webkit-backdrop-filter: blur(12px);
+  border: 1px solid rgba(210, 202, 169, 0.6);
+}
+
+/* Card hover transitions */
+.interactive-card {
+  transition: transform 200ms var(--ease-out-quad), box-shadow 200ms var(--ease-out-quad), border-color 200ms ease;
+}
+
+@media (hover: hover) and (pointer: fine) {
+  .interactive-card:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 8px 16px -4px rgba(40, 54, 24, 0.08), 0 2px 6px -1px rgba(40, 54, 24, 0.04);
+    border-color: #cfc8ab;
+  }
 }
 
 /* Custom Scrollbar for technical tables */
@@ -41,7 +86,7 @@ body {
 
 ::-webkit-scrollbar-thumb {
   background: #cfc8ab;
-  border-radius: 3px;
+  border-radius: 4px;
 }
 
 ::-webkit-scrollbar-thumb:hover {
@@ -52,4 +97,9 @@ body {
 :focus-visible {
   outline: 2px solid #BC6C25;
   outline-offset: 2px;
+}
+
+/* Smooth badge chips */
+.badge-chip {
+  transition: background-color 150ms ease, color 150ms ease;
 }

@@ -2,7 +2,7 @@
 
 import React from "react";
 import Link from "next/link";
-import { Menu, PlusCircle, BookmarkCheck, ArrowLeft } from "lucide-react";
+import { Menu, PlusCircle, BookmarkCheck, ArrowLeft, Sparkles, Activity } from "lucide-react";
 import { Button } from "@/components/ui/Button";
 
 export interface TopHeaderProps {
@@ -23,7 +23,7 @@ export function TopHeader({
   action,
 }: TopHeaderProps) {
   return (
-    <header className="h-16 bg-white border-b border-[#D2CAA9] px-4 sm:px-6 flex items-center justify-between sticky top-0 z-20 shadow-subtle">
+    <header className="h-16 bg-white/95 backdrop-blur-md border-b border-[#D2CAA9] px-4 sm:px-6 flex items-center justify-between sticky top-0 z-20 shadow-subtle transition-all">
       <div className="flex items-center space-x-3 min-w-0">
         {/* Mobile menu toggle */}
         <button
@@ -45,9 +45,15 @@ export function TopHeader({
         )}
 
         <div className="min-w-0">
-          <h1 className="text-base sm:text-lg font-bold text-forest-900 tracking-tight truncate leading-tight">
-            {title}
-          </h1>
+          <div className="flex items-center space-x-2">
+            <h1 className="text-base sm:text-lg font-bold text-forest-900 tracking-tight truncate leading-tight">
+              {title}
+            </h1>
+            <span className="hidden md:inline-flex items-center space-x-1 px-2 py-0.5 bg-emerald-50 text-emerald-800 border border-emerald-200 rounded-full text-[10px] font-mono">
+              <span className="w-1.5 h-1.5 rounded-full bg-emerald-500 animate-pulse" />
+              <span>Cloud Ativo</span>
+            </span>
+          </div>
           {subtitle && (
             <p className="text-[11px] sm:text-xs text-olive-800/70 truncate">
               {subtitle}
@@ -56,18 +62,26 @@ export function TopHeader({
         </div>
       </div>
 
-      <div className="flex items-center space-x-2 shrink-0">
+      <div className="flex items-center space-x-2.5 shrink-0">
         {action ? (
           action
         ) : (
           <>
             <Link href="/favoritos" className="hidden sm:inline-flex">
-              <Button variant="subtle" size="sm" leftIcon={<BookmarkCheck className="w-3.5 h-3.5 text-brand-copper" />}>
+              <Button
+                variant="subtle"
+                size="sm"
+                leftIcon={<BookmarkCheck className="w-3.5 h-3.5 text-brand-copper" />}
+              >
                 Favoritos
               </Button>
             </Link>
             <Link href="/fornecedores/novo">
-              <Button size="sm" leftIcon={<PlusCircle className="w-3.5 h-3.5" />}>
+              <Button
+                size="sm"
+                leftIcon={<PlusCircle className="w-3.5 h-3.5" />}
+                className="shadow-sm"
+              >
                 Novo Fornecedor
               </Button>
             </Link>
