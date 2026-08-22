@@ -40,20 +40,24 @@ export async function updateSession(request: NextRequest) {
     return supabaseResponse;
   }
 
+  // Se o usuário acessar a raiz (/), redireciona obrigatoriamente para a página de login
+  if (path === "/") {
+    const url = request.nextUrl.clone();
+    url.pathname = "/login";
+    return NextResponse.redirect(url);
+  }
+
   const {
     data: { user },
   } = await supabase.auth.getUser();
 
-  const isAuthPage = path.startsWith("/login") || path.startsWith("/auth");
   const isProtectedPath =
     path.startsWith("/dashboard") ||
     path.startsWith("/fornecedores") ||
     path.startsWith("/favoritos") ||
-    path.startsWith("/configuracoes") ||
-    path === "/";
+    path.startsWith("/configuracoes");
 
-  // If user is NOT logged in and trying to access protected paths:
-  // Check if Supabase is configured with real credentials
+  // Se não houver usuário autenticado em rotas protegidas, redireciona para o login
   const hasRealCredentials =
     process.env.NEXT_PUBLIC_SUPABASE_URL &&
     !process.env.NEXT_PUBLIC_SUPABASE_URL.includes("your-project-id") &&
@@ -63,13 +67,6 @@ export async function updateSession(request: NextRequest) {
   if (!user && isProtectedPath && hasRealCredentials) {
     const url = request.nextUrl.clone();
     url.pathname = "/login";
-    return NextResponse.redirect(url);
-  }
-
-  // If user is logged in and trying to access login page:
-  if (user && isAuthPage) {
-    const url = request.nextUrl.clone();
-    url.pathname = "/dashboard";
     return NextResponse.redirect(url);
   }
 
