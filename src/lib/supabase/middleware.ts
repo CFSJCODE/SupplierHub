@@ -27,33 +27,46 @@ export async function updateSession(request: NextRequest) {
             request,
           });
           cookiesToSet.forEach(({ name, value, options }) =>
-            supabaseResponse.cookies.set(name, value, options)
+            supabaseResponse.cookies.set(name, value, {
+              ...options,
+              path: "/",
+              sameSite: "lax",
+              secure: process.env.NODE_ENV === "production",
+            })
           );
         },
       },
     }
   );
 
-  // Do not run on static assets or favicon
+  // Não processa assets estáticos, favicon ou auth callback
   const path = request.nextUrl.pathname;
   if (
     path.startsWith("/_next") ||
     path.startsWith("/api") ||
+    path.startsWith("/auth/callback") ||
     path.includes(".")
   ) {
     return supabaseResponse;
   }
 
-  // Se o usuário acessar a raiz (/), redireciona obrigatoriamente para a página de login
-  if (path === "/") {
-    const url = request.nextUrl.clone();
-    url.pathname = "/login";
-    return NextResponse.redirect(url);
-  }
-
   const {
     data: { user },
   } = await supabase.auth.getUser();
+
+  // Rota raiz (/)
+  if (path === "/") {
+    const url = request.nextUrl.clone();
+    url.pathname = user ? "/dashboard" : "/login";
+    return NextResponse.redirect(url);
+  }
+
+  // Se o usuário já estiver autenticado e tentar acessar o /login, envia direto para o /dashboard
+  if (path === "/login" && user) {
+    const url = request.nextUrl.clone();
+    url.pathname = "/dashboard";
+    return NextResponse.redirect(url);
+  }
 
   const isProtectedPath =
     path.startsWith("/dashboard") ||
